@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Teller app — een simpele interactieve teller met increment, decrement en reset. Gebouwd op de NextJS 15 / Tailwind 4 / lucide-react baseline. State is lokaal en ephemeer.
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a welcoming landing page that prompts users to transform it via AI-powered chat.
 
 Architecture Overview
 ====================
@@ -9,8 +9,7 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Importeert en rendert `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert de tellerwaarde via `useState`. Toont increment (+), decrement (−) en reset knoppen. Teller kan niet onder 0 gaan.
+- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
