@@ -8,54 +8,70 @@ export default function Counter() {
   const [count, setCount] = useState(0);
 
   const increment = () => setCount((c) => c + 1);
-  const decrement = () => setCount((c) => c - 1);
+  const decrement = () => setCount((c) => Math.max(0, c - 1));
   const reset = () => setCount(0);
 
-  const countColor =
-    count > 0
-      ? 'text-emerald-500'
-      : count < 0
-      ? 'text-rose-500'
-      : 'text-slate-700';
+  const isZero = count === 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-10 w-full max-w-sm flex flex-col items-center gap-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex items-center justify-center p-6">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-sm flex flex-col items-center gap-8">
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Teller</h1>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Teller</h1>
+          <p className="text-sm text-gray-400 mt-1">Kan niet onder nul gaan</p>
+        </div>
 
         {/* Count display */}
-        <div className="flex items-center justify-center w-40 h-40 rounded-full bg-slate-50 border-4 border-slate-200 shadow-inner">
-          <span className={`text-6xl font-extrabold tabular-nums transition-colors duration-200 ${countColor}`}>
+        <div className="relative flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-200">
+          <span className="text-6xl font-extrabold text-white tabular-nums select-none">
             {count}
           </span>
         </div>
 
-        {/* +/- buttons */}
-        <div className="flex gap-4">
+        {/* Increment / Decrement buttons */}
+        <div className="flex gap-4 w-full">
           <button
             onClick={decrement}
-            aria-label="Verlaag teller"
-            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 border border-rose-200 hover:bg-rose-100 active:scale-95 transition-all duration-150 shadow-sm"
+            disabled={isZero}
+            aria-label="Verminder"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm
+              bg-red-50 text-red-500 border border-red-100
+              hover:bg-red-100 hover:shadow-md hover:shadow-red-100
+              active:scale-95
+              disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-red-50 disabled:hover:shadow-none
+              transition-all duration-150"
           >
-            <Minus className="w-7 h-7 stroke-[2.5]" />
+            <Minus className="w-5 h-5" />
+            Minus
           </button>
 
           <button
             onClick={increment}
-            aria-label="Verhoog teller"
-            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-500 border border-emerald-200 hover:bg-emerald-100 active:scale-95 transition-all duration-150 shadow-sm"
+            aria-label="Verhoog"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold text-sm
+              bg-indigo-600 text-white border border-indigo-600
+              hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-200
+              active:scale-95
+              transition-all duration-150"
           >
-            <Plus className="w-7 h-7 stroke-[2.5]" />
+            <Plus className="w-5 h-5" />
+            Plus
           </button>
         </div>
 
         {/* Reset button */}
         <button
           onClick={reset}
-          aria-label="Reset teller"
-          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200 hover:text-slate-700 active:scale-95 transition-all duration-150 text-sm font-medium shadow-sm"
+          disabled={isZero}
+          aria-label="Reset"
+          className="flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-medium
+            text-gray-400 bg-gray-50 border border-gray-200
+            hover:text-gray-600 hover:bg-gray-100 hover:shadow-sm
+            active:scale-95
+            disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-gray-50 disabled:hover:shadow-none
+            transition-all duration-150"
         >
           <RotateCcw className="w-4 h-4" />
           Reset
