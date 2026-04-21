@@ -2,98 +2,44 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Minus, RotateCcw } from 'lucide-react';
 
 export default function Counter() {
-  const [count, setCount] = useState(0);
-
-  const increment = () => setCount((c) => c + 1);
-  const decrement = () => setCount((c) => Math.max(0, c - 1));
-  const reset = () => setCount(0);
+  const [count, setCount] = useState<number>(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-6">
-      <div className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-3xl shadow-2xl p-12 flex flex-col items-center gap-10 w-full max-w-sm">
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="flex flex-col items-center gap-8">
+        <h1 className="text-3xl font-bold text-black">Teller</h1>
 
-        {/* Title */}
-        <h1 className="text-white/70 text-sm font-semibold uppercase tracking-widest">
-          Teller
-        </h1>
-
-        {/* Count display */}
-        <div className="flex flex-col items-center gap-2">
-          <span
-            className={`text-8xl font-bold tabular-nums transition-colors duration-300 ${
-              count === 0 ? 'text-white/30' : 'text-white'
-            }`}
-          >
-            {count}
-          </span>
-          <span className="text-white/40 text-xs font-medium">
-            {count === 0 ? 'Begin hier' : count === 1 ? '1 stap gezet' : `${count} stappen gezet`}
-          </span>
+        <div className="text-8xl font-bold text-black tabular-nums w-48 text-center">
+          {count}
         </div>
 
-        {/* +/- buttons */}
         <div className="flex items-center gap-4">
           <button
-            onClick={decrement}
-            disabled={count === 0}
-            className="w-16 h-16 rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-20 disabled:cursor-not-allowed text-white transition-all duration-150 active:scale-95 flex items-center justify-center shadow-lg"
-            aria-label="Verlagen"
+            onClick={() => setCount((c) => c - 1)}
+            className="w-14 h-14 rounded-full bg-white text-black text-2xl font-bold border-2 border-gray-300 hover:border-black hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-black"
+            aria-label="Verlaag teller"
           >
-            <Minus className="w-6 h-6" />
+            −
           </button>
 
           <button
-            onClick={increment}
-            className="w-20 h-20 rounded-2xl bg-indigo-500 hover:bg-indigo-400 text-white transition-all duration-150 active:scale-95 flex items-center justify-center shadow-xl shadow-indigo-500/30"
-            aria-label="Verhogen"
+            onClick={() => setCount(0)}
+            className="px-5 py-2 rounded-lg bg-white text-black text-sm font-medium border-2 border-gray-300 hover:border-black hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-black"
+            aria-label="Reset teller"
           >
-            <Plus className="w-8 h-8" />
+            Reset
           </button>
 
           <button
-            onClick={decrement}
-            disabled={count === 0}
-            className="w-16 h-16 rounded-2xl bg-white/10 hover:bg-white/20 disabled:opacity-20 disabled:cursor-not-allowed text-white transition-all duration-150 active:scale-95 flex items-center justify-center shadow-lg opacity-0 pointer-events-none"
-            aria-hidden="true"
+            onClick={() => setCount((c) => c + 1)}
+            className="w-14 h-14 rounded-full bg-black text-white text-2xl font-bold hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+            aria-label="Verhoog teller"
           >
-            <Minus className="w-6 h-6" />
+            +
           </button>
         </div>
-
-        {/* Action row */}
-        <div className="flex items-center gap-3 w-full">
-          <button
-            onClick={decrement}
-            disabled={count === 0}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-white/8 hover:bg-white/15 disabled:opacity-20 disabled:cursor-not-allowed text-white/80 text-sm font-medium transition-all duration-150 active:scale-95 border border-white/10"
-            aria-label="Verlagen"
-          >
-            <Minus className="w-4 h-4" />
-            Min
-          </button>
-
-          <button
-            onClick={reset}
-            disabled={count === 0}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/8 hover:bg-red-500/20 disabled:opacity-20 disabled:cursor-not-allowed text-white/60 hover:text-red-400 text-sm font-medium transition-all duration-150 active:scale-95 border border-white/10"
-            aria-label="Reset"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={increment}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 hover:text-indigo-200 text-sm font-medium transition-all duration-150 active:scale-95 border border-indigo-500/30"
-            aria-label="Verhogen"
-          >
-            <Plus className="w-4 h-4" />
-            Plus
-          </button>
-        </div>
-
       </div>
     </div>
   );
