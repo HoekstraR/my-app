@@ -1,0 +1,28 @@
+Project Summary
+===============
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a welcoming landing page that prompts users to transform it via AI-powered chat.
+
+Architecture Overview
+====================
+Single-page Next.js App Router app. Server Components by default; any interactivity lives in client components under `components/`. Top-level routing files (`page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx`, `loading.tsx`) are all server components — `'use client'` NEVER appears at this level (breaks WebContainer prerendering). Styling is Tailwind CSS 4 via `@import "tailwindcss";` in `app/globals.css`.
+
+Key Components
+==============
+
+- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
+- **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
+- **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
+- **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
+- **Loading** (`app/loading.tsx`) — Route transition spinner.
+
+Invariants
+==========
+- `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
+- Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
+- No database. No env vars. No auth. No persistence — any state is ephemeral.
+- `.env.local` exists at project root but is managed by the app (not written by agents directly).
+
+Notes for agents
+================
+- Dependencies, versions, and the directory tree are NOT duplicated here. Read `package.json` or `list_directory` for that.
+- When you change the project structure, update THIS file accordingly: add new components under Key Components, document new invariants, update the Architecture Overview if the fundamental shape shifts.
