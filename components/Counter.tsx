@@ -7,60 +7,68 @@ import { Plus, Minus, RotateCcw } from 'lucide-react';
 export default function Counter() {
   const [count, setCount] = useState(0);
 
-  const increment = () => setCount((prev) => prev + 1);
-  const decrement = () => setCount((prev) => Math.max(0, prev - 1));
+  const increment = () => setCount((c) => c + 1);
+  const decrement = () => setCount((c) => c - 1);
   const reset = () => setCount(0);
 
+  const countColor =
+    count > 0
+      ? 'text-emerald-400'
+      : count < 0
+      ? 'text-rose-400'
+      : 'text-white';
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-10 flex flex-col items-center gap-8 w-80">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-10 flex flex-col items-center gap-10 shadow-2xl w-full max-w-sm">
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Teller</h1>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white tracking-wide">Teller</h1>
+          <p className="text-slate-400 text-sm mt-1">Klik de knoppen om te tellen</p>
+        </div>
 
         {/* Count display */}
-        <div className="flex items-center justify-center w-36 h-36 rounded-full bg-blue-50 border-4 border-blue-200">
-          <span className="text-6xl font-extrabold text-blue-600 tabular-nums">
+        <div className="relative flex items-center justify-center w-44 h-44 rounded-full bg-white/5 border border-white/10 shadow-inner">
+          <span className={`text-7xl font-black tabular-nums transition-colors duration-300 ${countColor}`}>
             {count}
           </span>
         </div>
 
         {/* Buttons */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           {/* Decrement */}
           <button
             onClick={decrement}
-            disabled={count === 0}
-            aria-label="Verlaag teller"
-            className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 hover:bg-red-200 active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
+            aria-label="Verlagen"
+            className="w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center hover:bg-rose-500/30 hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg"
           >
-            <Minus className="w-6 h-6" />
+            <Minus className="w-6 h-6" strokeWidth={2.5} />
           </button>
 
           {/* Reset */}
           <button
             onClick={reset}
-            disabled={count === 0}
-            aria-label="Reset teller"
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
+            aria-label="Reset"
+            className="w-12 h-12 rounded-xl bg-slate-700/60 border border-slate-600/50 text-slate-400 flex items-center justify-center hover:bg-slate-600/60 hover:text-white hover:scale-105 active:scale-95 transition-all duration-150 shadow-md"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-5 h-5" strokeWidth={2} />
           </button>
 
           {/* Increment */}
           <button
             onClick={increment}
-            aria-label="Verhoog teller"
-            className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 text-white hover:bg-blue-700 active:scale-95 transition-all shadow-md"
+            aria-label="Verhogen"
+            className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/30 hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg"
           >
-            <Plus className="w-6 h-6" />
+            <Plus className="w-6 h-6" strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* Floor hint */}
-        {count === 0 && (
-          <p className="text-xs text-slate-400 -mt-4">Minimum bereikt</p>
-        )}
+        {/* Status label */}
+        <p className="text-xs text-slate-500 tracking-widest uppercase">
+          {count === 0 ? 'Nul' : count > 0 ? `+${count} boven nul` : `${Math.abs(count)} onder nul`}
+        </p>
       </div>
     </div>
   );
