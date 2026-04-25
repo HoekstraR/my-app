@@ -1,11 +1,2 @@
-import type { Config } from 'jest';
-import nextJest from 'next/jest';
-
-const createJestConfig = nextJest({ dir: './' });
-
-const config: Config = {
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-};
-
-export default createJestConfig(config);
+// This file is intentionally left without a Jest config export.
+// Jest uses jest.config.js instead (no ts-node required).
