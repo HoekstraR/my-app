@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — een simpele teller met increment, decrement en reset. Lokale state via useState, lucide-react iconen, dark glassmorphism styling met Tailwind CSS 4.
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a welcoming landing page that prompts users to transform it via AI-powered chat.
 
 Architecture Overview
 ====================
@@ -9,8 +9,7 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Importeert en rendert `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert de teller state (useState). Toont increment (+), decrement (-) en reset knoppen met lucide-react iconen. Kleur van de teller past dynamisch aan (groen positief, rood negatief, wit nul).
+- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
