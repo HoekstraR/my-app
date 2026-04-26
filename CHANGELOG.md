@@ -1,4 +1,5 @@
-# Changelog
 
-## 2026-04-25 06:01
-fix: Replace jest.config.ts with jest.config.js to remove ts-node dependency
+## 2026-04-26 12:45
+feat: Add simple counter component with increment, decrement, and reset
+
+# Changelog
