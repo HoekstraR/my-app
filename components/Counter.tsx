@@ -7,7 +7,7 @@ export default function Counter() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="min-h-screen bg-yellow-300 flex items-center justify-center">
       <div className="flex flex-col items-center gap-8">
         <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">Teller</h1>
 
