@@ -1,4 +1,5 @@
-## 2026-04-27 19:03
-feat: Add simple counter component with increment, decrement, and reset
 
 # Changelog
+
+## 2026-04-27 19:11
+feat: Build full kinder-teller-app with 3 counters, history panel, confetti, sound effects, localStorage persistence, and ARIA accessibility

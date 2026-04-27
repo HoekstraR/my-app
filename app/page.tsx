@@ -1,5 +1,7 @@
-import Counter from '@/components/Counter';
+
+// Hoofdpagina — blijft een Server Component (geen 'use client' hier)
+import TellerApp from '@/components/TellerApp';
 
 export default function Page() {
-  return <Counter />;
+  return <TellerApp />;
 }
