@@ -1,5 +1,5 @@
 
 # Changelog
 
-## 2026-04-27 19:11
-feat: Build full kinder-teller-app with 3 counters, history panel, confetti, sound effects, localStorage persistence, and ARIA accessibility
+## 2026-04-28 06:01
+feat: Add full-featured kids counter app with 3 colored counters, history panel, confetti, sound effects, animations, localStorage persistence, and full accessibility
