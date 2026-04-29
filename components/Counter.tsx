@@ -1,44 +1,79 @@
+
 'use client';
 
 import { useState } from 'react';
+import { Plus, Minus } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function Counter() {
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleClick = async (action: 'increment' | 'decrement') => {
+    setLoading(true);
+    setError(null);
+
+    const newValue = action === 'increment' ? count + 1 : count - 1;
+
+    const { error: supabaseError } = await supabase
+      .from('counter_logs')
+      .insert({ action, count_value: newValue });
+
+    if (supabaseError) {
+      setError(`Opslaan mislukt: ${supabaseError.message}`);
+    } else {
+      setCount(newValue);
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="flex flex-col items-center gap-8">
-        <h1 className="text-2xl font-semibold text-gray-800 tracking-tight">Teller</h1>
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="bg-slate-800 rounded-3xl shadow-2xl p-14 flex flex-col items-center gap-10 border border-slate-700">
+        {/* Title */}
+        <h1 className="text-slate-400 text-lg font-medium tracking-widest uppercase">
+          Teller
+        </h1>
 
-        <div className="text-8xl font-bold text-black tabular-nums w-48 text-center">
+        {/* Count display */}
+        <div className="text-white font-bold text-9xl tabular-nums select-none leading-none">
           {count}
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Buttons */}
+        <div className="flex items-center gap-8">
+          {/* Decrement */}
           <button
-            onClick={() => setCount((c) => c - 1)}
-            className="w-14 h-14 rounded-full bg-white text-black border border-gray-300 text-2xl font-medium hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-black"
-            aria-label="Verminder teller"
+            onClick={() => handleClick('decrement')}
+            disabled={loading}
+            aria-label="Verlagen"
+            className="w-20 h-20 rounded-full bg-red-500 hover:bg-red-400 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center shadow-lg shadow-red-900/40"
           >
-            −
+            <Minus className="w-9 h-9 text-white" strokeWidth={2.5} />
           </button>
 
+          {/* Increment */}
           <button
-            onClick={() => setCount((c) => c + 1)}
-            className="w-14 h-14 rounded-full bg-black text-white text-2xl font-medium hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-black"
-            aria-label="Verhoog teller"
+            onClick={() => handleClick('increment')}
+            disabled={loading}
+            aria-label="Verhogen"
+            className="w-20 h-20 rounded-full bg-green-500 hover:bg-green-400 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center shadow-lg shadow-green-900/40"
           >
-            +
+            <Plus className="w-9 h-9 text-white" strokeWidth={2.5} />
           </button>
         </div>
 
-        <button
-          onClick={() => setCount(0)}
-          className="text-sm text-gray-500 hover:text-black transition-colors underline underline-offset-2 focus:outline-none"
-          aria-label="Reset teller naar nul"
-        >
-          Reset
-        </button>
+        {/* Loading indicator */}
+        {loading && (
+          <p className="text-slate-400 text-sm animate-pulse">Opslaan…</p>
+        )}
+
+        {/* Error message */}
+        {error && !loading && (
+          <p className="text-red-400 text-sm text-center max-w-xs">{error}</p>
+        )}
       </div>
     </div>
   );
