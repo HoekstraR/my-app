@@ -1,6 +1,6 @@
 Project Summary
 ===============
-NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a welcoming landing page that prompts users to transform it via AI-powered chat.
+Counter app — een simpele teller die elke klik (increment / decrement) logt in Supabase. Gebouwd op de NextJS 15 / Tailwind 4 baseline. Verbinding met Supabase via `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 Architecture Overview
 ====================
@@ -9,18 +9,25 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Renders `<Counter />`.
+- **Counter** (`components/Counter.tsx`) — Client Component. Beheert tellerwaarde en loading-state. Logt elke klik naar Supabase `counter_logs`. Toont errors inline.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
 - **Loading** (`app/loading.tsx`) — Route transition spinner.
 
+Supporting files
+----------------
+- `lib/supabase.ts` — typed Supabase client (Database generic).
+- `types/database.ts` — TypeScript Database type voor `counter_logs` tabel.
+
 Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- No database. No env vars. No auth. No persistence — any state is ephemeral.
-- `.env.local` exists at project root but is managed by the app (not written by agents directly).
+- Supabase client is browser-side only (NEXT_PUBLIC_ keys). Geen server-side Supabase client.
+- RLS op `counter_logs`: anon mag inserten en selecten.
+- `.env.local` bevat `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 Notes for agents
 ================
