@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — een simpele teller die elke klik (increment / decrement) logt in Supabase. Gebouwd op de NextJS 15 / Tailwind 4 baseline. Verbinding met Supabase via `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+Counter app met Supabase persistentie. Elke klik op de min- of plus-knop wordt opgeslagen als een rij in de `counter_logs` tabel in Supabase (action: 'increment'|'decrement', count_value: huidige stand). Gebouwd op NextJS 15 / Tailwind CSS 4.
 
 Architecture Overview
 ====================
@@ -9,25 +9,24 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Renders `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component. Beheert tellerwaarde en loading-state. Logt elke klik naar Supabase `counter_logs`. Toont errors inline.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Rendert `<Counter />`.
+- **Counter** (`components/Counter.tsx`) — Client Component. Beheert tellerstand via `useState`, toont min/plus knoppen, insert elke klik in `counter_logs` via Supabase. Toont opslaatstatus (saving / saved ✓ / error).
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
 - **Loading** (`app/loading.tsx`) — Route transition spinner.
 
-Supporting files
-----------------
-- `lib/supabase.ts` — typed Supabase client (Database generic).
-- `types/database.ts` — TypeScript Database type voor `counter_logs` tabel.
+Lib / Types
+===========
+- **`lib/supabase.ts`** — Supabase client aangemaakt met `createClient<Database>`. Gebruikt `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- **`types/database.ts`** — TypeScript Database type voor de `counter_logs` tabel (Row, Insert, Update).
 
 Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Supabase client is browser-side only (NEXT_PUBLIC_ keys). Geen server-side Supabase client.
-- RLS op `counter_logs`: anon mag inserten en selecten.
-- `.env.local` bevat `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- Supabase client is client-side only (`NEXT_PUBLIC_*` vars). Geen server-side Supabase gebruik.
+- `.env.local` bevat `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY` (door Dana geconfigureerd).
 
 Notes for agents
 ================
