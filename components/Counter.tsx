@@ -2,101 +2,56 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Minus } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-
-type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+import { Plus, Minus, RotateCcw } from 'lucide-react';
 
 export default function Counter() {
-  const [count, setCount] = useState<number>(0);
-  const [status, setStatus] = useState<SaveStatus>('idle');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [count, setCount] = useState(0);
 
-  const logAction = async (action: 'increment' | 'decrement', newCount: number) => {
-    setStatus('saving');
-    setErrorMessage('');
-
-    const { error } = await supabase
-      .from('counter_logs')
-      .insert({ action, count_value: newCount });
-
-    if (error) {
-      setStatus('error');
-      setErrorMessage(error.message);
-    } else {
-      setStatus('saved');
-      setTimeout(() => setStatus('idle'), 2000);
-    }
-  };
-
-  const handleIncrement = async () => {
-    const newCount = count + 1;
-    setCount(newCount);
-    await logAction('increment', newCount);
-  };
-
-  const handleDecrement = async () => {
-    const newCount = count - 1;
-    setCount(newCount);
-    await logAction('decrement', newCount);
-  };
+  const increment = () => setCount((prev) => prev + 1);
+  const decrement = () => setCount((prev) => Math.max(0, prev - 1));
+  const reset = () => setCount(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-10 w-full max-w-sm text-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-50 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-10 flex flex-col items-center gap-8 w-72">
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-800 mb-2 tracking-tight">Teller</h1>
-        <p className="text-sm text-gray-400 mb-10">Elke klik wordt opgeslagen in Supabase</p>
+        <h1 className="text-2xl font-bold text-slate-700 tracking-wide">Teller</h1>
 
-        {/* Count display */}
-        <div className="relative mb-10">
-          <div className="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-200">
-            <span className="text-6xl font-bold text-white tabular-nums">{count}</span>
-          </div>
+        {/* Counter display */}
+        <div className="w-32 h-32 rounded-full bg-blue-600 flex items-center justify-center shadow-lg">
+          <span className="text-5xl font-extrabold text-white tabular-nums">{count}</span>
         </div>
 
-        {/* Buttons */}
-        <div className="flex items-center justify-center gap-6 mb-8">
+        {/* Increment / Decrement buttons */}
+        <div className="flex items-center gap-4">
           <button
-            onClick={handleDecrement}
-            disabled={status === 'saving'}
-            className="w-16 h-16 rounded-2xl bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-600 flex items-center justify-center transition-all duration-150 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
-            aria-label="Verlaag teller"
+            onClick={decrement}
+            disabled={count === 0}
+            className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Verlagen"
           >
-            <Minus className="w-6 h-6" strokeWidth={2.5} />
+            <Minus className="w-6 h-6" />
           </button>
 
           <button
-            onClick={handleIncrement}
-            disabled={status === 'saving'}
-            className="w-16 h-16 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center transition-all duration-150 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-md hover:shadow-lg shadow-indigo-200"
-            aria-label="Verhoog teller"
+            onClick={increment}
+            className="w-14 h-14 rounded-full bg-green-100 text-green-600 flex items-center justify-center hover:bg-green-200 transition-colors"
+            aria-label="Verhogen"
           >
-            <Plus className="w-6 h-6" strokeWidth={2.5} />
+            <Plus className="w-6 h-6" />
           </button>
         </div>
 
-        {/* Status indicator */}
-        <div className="h-6 flex items-center justify-center">
-          {status === 'saving' && (
-            <span className="text-sm text-gray-400 flex items-center gap-1.5">
-              <span className="inline-block w-3 h-3 border-2 border-gray-300 border-t-indigo-500 rounded-full animate-spin" />
-              Opslaan…
-            </span>
-          )}
-          {status === 'saved' && (
-            <span className="text-sm text-emerald-600 font-medium">
-              Opgeslagen ✓
-            </span>
-          )}
-          {status === 'error' && (
-            <span className="text-sm text-red-500 font-medium" title={errorMessage}>
-              Fout bij opslaan ✗
-            </span>
-          )}
-        </div>
-
+        {/* Reset button */}
+        <button
+          onClick={reset}
+          className="flex items-center gap-2 px-5 py-2 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 text-sm font-medium transition-colors"
+          aria-label="Reset"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Reset
+        </button>
       </div>
     </div>
   );

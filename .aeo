@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app met Supabase persistentie. Elke klik op de min- of plus-knop wordt opgeslagen als een rij in de `counter_logs` tabel in Supabase (action: 'increment'|'decrement', count_value: huidige stand). Gebouwd op NextJS 15 / Tailwind CSS 4.
+Teller app — een simpele interactieve teller gebouwd op de NextJS 15 / Tailwind 4 baseline. Bevat verhogen, verlagen (min 0) en reset functionaliteit.
 
 Architecture Overview
 ====================
@@ -10,23 +10,18 @@ Key Components
 ==============
 
 - **Page** (`app/page.tsx`) — Server Component wrapper. Rendert `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component. Beheert tellerstand via `useState`, toont min/plus knoppen, insert elke klik in `counter_logs` via Supabase. Toont opslaatstatus (saving / saved ✓ / error).
+- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert de tellerstand met `useState`. Knoppen: Plus (verhogen), Minus (verlagen, min 0), RotateCcw (reset naar 0). Iconen via `lucide-react`.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
 - **Loading** (`app/loading.tsx`) — Route transition spinner.
 
-Lib / Types
-===========
-- **`lib/supabase.ts`** — Supabase client aangemaakt met `createClient<Database>`. Gebruikt `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-- **`types/database.ts`** — TypeScript Database type voor de `counter_logs` tabel (Row, Insert, Update).
-
 Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Supabase client is client-side only (`NEXT_PUBLIC_*` vars). Geen server-side Supabase gebruik.
-- `.env.local` bevat `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY` (door Dana geconfigureerd).
+- No database. No env vars. No auth. No persistence — any state is ephemeral.
+- `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
 ================
