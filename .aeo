@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — een teller met increment, decrement en reset. Elke klik wordt opgeslagen in de Supabase `counter_logs` tabel. Bij opstarten wordt de meest recente waarde geladen. Gebouwd op Next.js 15 + Tailwind CSS 4.
+Counter app with Supabase persistence. Every click (increment / decrement / reset) is saved to the `counter_logs` table. On mount the app restores the last known count and shows the 10 most recent log entries. Dark-themed UI built with Tailwind CSS 4.
 
 Architecture Overview
 ====================
@@ -9,10 +9,10 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Rendert `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert `count`, `loading`, `actionLoading` en `logs` state. Laadt bij mount de meest recente `count_value` en de laatste 5 logs uit Supabase. Heeft `handleIncrement`, `handleDecrement` en `handleReset` functies die een row inserten in `counter_logs`.
-- **supabase** (`lib/supabase.ts`) — Typed Supabase client, gebruikt `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-- **Database types** (`types/database.ts`) — TypeScript interfaces voor de `counter_logs` tabel.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Renders `<Counter />`.
+- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Owns count state and log list. Fetches initial state from Supabase on mount; inserts a row on every button click. Shows the last 10 logs in a scrollable list.
+- **supabase** (`lib/supabase.ts`) — typed Supabase client (uses `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
+- **Database types** (`types/database.ts`) — TypeScript interface for the `counter_logs` table (Row / Insert / Update).
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -22,9 +22,7 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Supabase project `jlzdlrxjdlhauomfomro`. Tabel `counter_logs` (id, action, count_value, created_at). RLS aan, anon insert + select policies actief.
-- Env vars: `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`.
-- Geen auth — alles werkt anoniem via de anon key.
+- No database. No env vars. No auth. No persistence — any state is ephemeral.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
