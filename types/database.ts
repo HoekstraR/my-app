@@ -21,6 +21,7 @@ export type Database = {
           created_at?: string
           id?: string
         }
+        Relationships: []
       }
     }
   }
