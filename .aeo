@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — een simpele teller die elke klik (increment, decrement, reset) opslaat in Supabase. Toont de huidige waarde en de laatste 5 acties live opgehaald uit de database. Gebouwd op Next.js 15 / Tailwind 4 / Supabase.
+Supabase Counter — een interactieve teller waarvan elke actie (increment, decrement, reset) als log wordt weggeschreven naar Supabase. Bij laden wordt de laatste opgeslagen waarde opgehaald. Gebouwd op Next.js 15 / Tailwind CSS 4 / Supabase JS v2.
 
 Architecture Overview
 ====================
@@ -9,8 +9,10 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Rendert alleen `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component ('use client'). Beheert tellerwaarde, voert Supabase inserts uit bij elke actie, toont de laatste 5 logs. Loading state + error handling aanwezig.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Renders `<Counter />`.
+- **Counter** (`components/Counter.tsx`) — Client Component. Beheert `count`, `loading`, `saving` en `logs` state. Haalt bij mount de laatste `count_value` op uit Supabase; schrijft bij elke klik een nieuw log-record. Toont de laatste 5 acties onder de teller.
+- **Supabase client** (`lib/supabase.ts`) — Typed Supabase client via `@supabase/supabase-js`, geladen met `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+- **Database types** (`types/database.ts`) — TypeScript type definitions voor de `counter_logs` tabel.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -20,9 +22,10 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Supabase project `jlzdlrxjdlhauomfomro`. Tabel `counter_logs` met kolommen `id`, `action`, `count_value`, `created_at`. RLS aan met anon insert + select policies.
-- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` staan in `.env.local`.
-- `lib/supabase.ts` exporteert de getypte Supabase client. `types/database.ts` bevat de DB-types.
+- Supabase project: `jlzdlrxjdlhauomfomro`. Tabel: `counter_logs` (id uuid, action text, count_value integer, created_at timestamptz). RLS aan, anon mag insert én select.
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`.
+- Elke klik insert een nieuw record; de teller-waarde wordt afgeleid van het meest recente record (geen UPDATE, alleen INSERT).
+- Bij lege tabel (`PGRST116` error) start de teller op 0.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
