@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — a simple click counter that persists every action to Supabase. Tracks increment, decrement, and reset actions with their resulting count value in a `counter_logs` table. Built on NextJS 15 / Tailwind 4 / Supabase.
+Counter app — een simpele teller die elke klik (increment, decrement, reset) opslaat in Supabase. Toont de huidige waarde en de laatste 5 acties live opgehaald uit de database. Gebouwd op Next.js 15 / Tailwind 4 / Supabase.
 
 Architecture Overview
 ====================
@@ -9,7 +9,8 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Rendert alleen `<Counter />`.
+- **Counter** (`components/Counter.tsx`) — Client Component ('use client'). Beheert tellerwaarde, voert Supabase inserts uit bij elke actie, toont de laatste 5 logs. Loading state + error handling aanwezig.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -19,7 +20,9 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- No database. No env vars. No auth. No persistence — any state is ephemeral.
+- Supabase project `jlzdlrxjdlhauomfomro`. Tabel `counter_logs` met kolommen `id`, `action`, `count_value`, `created_at`. RLS aan met anon insert + select policies.
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` staan in `.env.local`.
+- `lib/supabase.ts` exporteert de getypte Supabase client. `types/database.ts` bevat de DB-types.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
