@@ -1,18 +1,31 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Plus, Minus, RotateCcw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/database';
 
-type Action = 'increment' | 'decrement' | 'reset';
+type CounterLog = Database['public']['Tables']['counter_logs']['Row'];
+type CounterAction = 'increment' | 'decrement' | 'reset';
 
 export default function Counter() {
   const [count, setCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [lastAction, setLastAction] = useState<Action | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [logs, setLogs] = useState<CounterLog[]>([]);
+
+  const fetchLogs = useCallback(async () => {
+    const { data } = await supabase
+      .from('counter_logs')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5);
+    if (data) setLogs(data);
+  }, []);
 
   useEffect(() => {
-    async function fetchLatest() {
+    const init = async () => {
       const { data, error } = await supabase
         .from('counter_logs')
         .select('count_value')
@@ -20,137 +33,133 @@ export default function Counter() {
         .limit(1)
         .single();
 
-      if (error) {
-        // PGRST116 = no rows found → start at 0
-        if (error.code === 'PGRST116') {
-          setCount(0);
-        } else {
-          console.error('Error fetching counter:', error.message);
-        }
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching initial count:', error);
       } else if (data) {
         setCount(data.count_value);
       }
 
-      setLoading(false);
-    }
+      await fetchLogs();
+      setInitializing(false);
+    };
 
-    void fetchLatest();
-  }, []);
+    init();
+  }, [fetchLogs]);
 
-  async function handleAction(action: Action) {
-    let newValue: number;
-    if (action === 'increment') newValue = count + 1;
-    else if (action === 'decrement') newValue = count - 1;
-    else newValue = 0;
-
+  const handleAction = async (action: CounterAction) => {
+    if (loading) return;
     setLoading(true);
-    setLastAction(action);
-    setCount(newValue);
+
+    let newCount: number;
+    if (action === 'increment') newCount = count + 1;
+    else if (action === 'decrement') newCount = count - 1;
+    else newCount = 0;
 
     const { error } = await supabase
       .from('counter_logs')
-      .insert({ action, count_value: newValue });
+      .insert({ action, count_value: newCount });
 
     if (error) {
-      console.error('Error logging action:', error.message);
-      // revert on failure
-      setCount(count);
+      console.error('Error inserting log:', error);
+    } else {
+      setCount(newCount);
+      await fetchLogs();
     }
 
     setLoading(false);
-  }
+  };
 
-  const actionLabel: Record<Action, string> = {
-    increment: 'opgehoogd',
-    decrement: 'verlaagd',
-    reset: 'gereset',
+  const formatTime = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  const actionLabel: Record<CounterAction, string> = {
+    increment: '＋ Verhoogd',
+    decrement: '− Verlaagd',
+    reset: '↺ Reset',
+  };
+
+  const actionColor: Record<CounterAction, string> = {
+    increment: 'text-emerald-600',
+    decrement: 'text-rose-500',
+    reset: 'text-amber-500',
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex items-center justify-center p-6">
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-10 w-full max-w-sm shadow-2xl text-center">
-
-        {/* Title */}
-        <p className="text-blue-300 text-sm font-semibold tracking-widest uppercase mb-6">
-          Teller
-        </p>
-
-        {/* Count display */}
-        <div className="relative mb-8">
-          <div className="text-8xl font-black text-white tabular-nums leading-none">
-            {loading && count === 0 ? (
-              <span className="text-white/30 text-5xl">…</span>
-            ) : (
-              <span className={count < 0 ? 'text-red-400' : count > 0 ? 'text-green-400' : 'text-white'}>
-                {count}
-              </span>
-            )}
-          </div>
-          {lastAction && !loading && (
-            <p className="text-white/40 text-xs mt-3 tracking-wide">
-              Zojuist {actionLabel[lastAction]}
-            </p>
+    <div className="flex flex-col items-center gap-8 w-full max-w-sm">
+      {/* Counter display */}
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-sm font-medium text-slate-400 uppercase tracking-widest">Teller</p>
+        <div className="text-8xl font-bold tabular-nums text-slate-800 min-w-[4ch] text-center">
+          {initializing ? (
+            <span className="text-5xl text-slate-300 animate-pulse">…</span>
+          ) : (
+            count
           )}
         </div>
-
-        {/* Buttons */}
-        <div className="flex gap-3 justify-center">
-          {/* Decrement */}
-          <button
-            onClick={() => void handleAction('decrement')}
-            disabled={loading}
-            className="flex-1 py-4 rounded-2xl bg-red-500/20 border border-red-500/30 text-red-300 text-2xl font-bold
-                       hover:bg-red-500/30 hover:border-red-400/50 hover:text-red-200
-                       active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
-                       transition-all duration-150"
-            aria-label="Verlaag"
-          >
-            −
-          </button>
-
-          {/* Reset */}
-          <button
-            onClick={() => void handleAction('reset')}
-            disabled={loading}
-            className="flex-1 py-4 rounded-2xl bg-white/10 border border-white/20 text-white/60 text-sm font-semibold
-                       hover:bg-white/15 hover:border-white/30 hover:text-white/80
-                       active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
-                       transition-all duration-150"
-            aria-label="Reset naar 0"
-          >
-            Reset
-          </button>
-
-          {/* Increment */}
-          <button
-            onClick={() => void handleAction('increment')}
-            disabled={loading}
-            className="flex-1 py-4 rounded-2xl bg-green-500/20 border border-green-500/30 text-green-300 text-2xl font-bold
-                       hover:bg-green-500/30 hover:border-green-400/50 hover:text-green-200
-                       active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed
-                       transition-all duration-150"
-            aria-label="Verhoog"
-          >
-            +
-          </button>
-        </div>
-
-        {/* Loading indicator */}
-        {loading && (
-          <div className="mt-6 flex items-center justify-center gap-2 text-white/30 text-xs">
-            <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-            </svg>
-            Opslaan…
-          </div>
-        )}
-
-        {/* Footer hint */}
-        <p className="mt-8 text-white/20 text-xs">
-          Elke actie wordt opgeslagen in Supabase
-        </p>
       </div>
+
+      {/* Buttons */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => handleAction('decrement')}
+          disabled={loading || initializing}
+          className="flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+          aria-label="Verlaag teller"
+        >
+          <Minus className="w-6 h-6" strokeWidth={2.5} />
+        </button>
+
+        <button
+          onClick={() => handleAction('reset')}
+          disabled={loading || initializing}
+          className="flex items-center justify-center w-12 h-12 rounded-xl bg-amber-100 text-amber-600 hover:bg-amber-200 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+          aria-label="Reset teller"
+        >
+          <RotateCcw className="w-5 h-5" strokeWidth={2.5} />
+        </button>
+
+        <button
+          onClick={() => handleAction('increment')}
+          disabled={loading || initializing}
+          className="flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 hover:bg-emerald-200 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+          aria-label="Verhoog teller"
+        >
+          <Plus className="w-6 h-6" strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* Loading indicator */}
+      {loading && (
+        <p className="text-xs text-slate-400 animate-pulse">Opslaan…</p>
+      )}
+
+      {/* Log */}
+      {logs.length > 0 && (
+        <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-4 pt-3 pb-2">
+            Laatste acties
+          </p>
+          <ul className="divide-y divide-slate-100">
+            {logs.map((log) => (
+              <li key={log.id} className="flex items-center justify-between px-4 py-2">
+                <span className={`text-sm font-medium ${actionColor[log.action]}`}>
+                  {actionLabel[log.action]}
+                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-bold tabular-nums text-slate-700">
+                    {log.count_value}
+                  </span>
+                  <span className="text-xs text-slate-400">
+                    {formatTime(log.created_at)}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
