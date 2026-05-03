@@ -4,23 +4,24 @@ export type Database = {
     Tables: {
       counter_logs: {
         Row: {
-          id: string
-          action: 'increment' | 'decrement' | 'reset'
+          action: string
           count_value: number
           created_at: string
+          id: string
         }
         Insert: {
-          id?: string
-          action: 'increment' | 'decrement' | 'reset'
+          action: string
           count_value: number
           created_at?: string
+          id?: string
         }
         Update: {
-          id?: string
-          action?: 'increment' | 'decrement' | 'reset'
+          action?: string
           count_value?: number
           created_at?: string
+          id?: string
         }
+        Relationships: []
       }
     }
   }

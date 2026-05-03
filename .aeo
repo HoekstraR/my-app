@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app — een simpele teller met increment, decrement en reset. Elke klik wordt als log-rij opgeslagen in Supabase (`counter_logs`). Bij mount wordt de laatste waarde opgehaald. Gebouwd op Next.js 15 / Tailwind 4 / Supabase JS v2.
+Counter app — een simpele teller waarvan elke klik (increment / decrement / reset) wordt opgeslagen in Supabase. Bij mount laadt de app de laatste bekende waarde uit de `counter_logs` tabel. Gebouwd op Next.js 15 / Tailwind 4 / Supabase JS v2.
 
 Architecture Overview
 ====================
@@ -10,7 +10,7 @@ Key Components
 ==============
 
 - **Page** (`app/page.tsx`) — Server Component wrapper. Renders `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component. Laadt laatste tellerwaarde bij mount, biedt increment/decrement/reset knoppen, slaat elke actie op in Supabase en toont een save-status indicator.
+- **Counter** (`components/Counter.tsx`) — Client Component. Laadt de laatste `count_value` bij mount via Supabase. Beheert lokale count state. Insert bij elke actie (increment / decrement / reset) een rij in `counter_logs`.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -20,9 +20,10 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Supabase client is a singleton in `lib/supabase.ts`, typed via `types/database.ts`.
-- Env vars used: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (both in `.env.local`).
-- `counter_logs` table: RLS enabled, anon insert + select policies active.
+- Supabase client is initialised in `lib/supabase.ts` using `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (NOT `ANON_KEY`).
+- Database types live in `types/database.ts` — keep in sync with the `counter_logs` schema.
+- `PGRST116` from Supabase means "no rows" — Counter treats this as a valid start state (count = 0).
+- `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
 ================
