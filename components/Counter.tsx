@@ -1,121 +1,158 @@
 
 'use client';
 
-import { useState } from 'react';
-import { Plus, Minus, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Plus, Minus, RotateCcw } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/database';
 
+type CounterLog = Database['public']['Tables']['counter_logs']['Row'];
 type Action = 'increment' | 'decrement' | 'reset';
-type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 export default function Counter() {
-  const [count, setCount] = useState(0);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [count, setCount] = useState<number>(0);
+  const [logs, setLogs] = useState<CounterLog[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [actionLoading, setActionLoading] = useState<boolean>(false);
 
-  const logAction = async (action: Action, newValue: number): Promise<void> => {
-    setSaveStatus('saving');
-    const { error } = await supabase
+  const fetchLogs = useCallback(async () => {
+    const { data } = await supabase
       .from('counter_logs')
-      .insert({ action, count_value: newValue });
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
 
-    if (error) {
-      console.error('Supabase insert error:', error);
-      setSaveStatus('error');
-    } else {
-      setSaveStatus('saved');
+    if (data && data.length > 0) {
+      setLogs(data);
+      setCount(data[0].count_value);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchLogs();
+    return undefined;
+  }, [fetchLogs]);
+
+  const handleAction = async (action: Action) => {
+    if (actionLoading) return;
+    setActionLoading(true);
+
+    let newCount = count;
+    if (action === 'increment') newCount = count + 1;
+    else if (action === 'decrement') newCount = count - 1;
+    else if (action === 'reset') newCount = 0;
+
+    setCount(newCount);
+
+    const { data } = await supabase
+      .from('counter_logs')
+      .insert({ action, count_value: newCount })
+      .select()
+      .single();
+
+    if (data) {
+      setLogs(prev => [data, ...prev].slice(0, 10));
     }
 
-    // Reset status after 2 seconds
-    setTimeout(() => setSaveStatus('idle'), 2000);
+    setActionLoading(false);
   };
 
-  const handleIncrement = (): void => {
-    const newValue = count + 1;
-    setCount(newValue);
-    void logAction('increment', newValue);
+  const actionLabel: Record<Action, string> = {
+    increment: '+1',
+    decrement: '−1',
+    reset: 'reset',
   };
 
-  const handleDecrement = (): void => {
-    const newValue = count - 1;
-    setCount(newValue);
-    void logAction('decrement', newValue);
-  };
-
-  const handleReset = (): void => {
-    const newValue = 0;
-    setCount(newValue);
-    void logAction('reset', newValue);
+  const actionColor: Record<Action, string> = {
+    increment: 'text-emerald-400',
+    decrement: 'text-rose-400',
+    reset: 'text-amber-400',
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-10 w-full max-w-sm text-center">
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
 
-        {/* Title */}
-        <h1 className="text-lg font-semibold text-slate-500 uppercase tracking-widest mb-8">
-          Teller
-        </h1>
+        {/* Card */}
+        <div className="bg-gray-900 rounded-3xl border border-gray-800 shadow-2xl overflow-hidden">
 
-        {/* Counter display */}
-        <div className="relative mb-10">
-          <div className="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-200">
-            <span className="text-5xl font-bold text-white tabular-nums">
-              {count}
-            </span>
+          {/* Header */}
+          <div className="px-8 pt-8 pb-6 text-center border-b border-gray-800">
+            <p className="text-gray-500 text-sm font-medium uppercase tracking-widest mb-2">Teller</p>
+            {loading ? (
+              <div className="h-24 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gray-700 border-t-indigo-500 rounded-full animate-spin" />
+              </div>
+            ) : (
+              <p className="text-8xl font-black text-white tabular-nums leading-none">
+                {count}
+              </p>
+            )}
           </div>
-        </div>
 
-        {/* Buttons */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <button
-            onClick={handleDecrement}
-            className="w-14 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all duration-150 active:scale-95 hover:shadow-md"
-            aria-label="Verlaag teller"
-          >
-            <Minus className="w-5 h-5" />
-          </button>
+          {/* Buttons */}
+          <div className="px-8 py-6 flex gap-3">
+            <button
+              onClick={() => handleAction('decrement')}
+              disabled={actionLoading || loading}
+              className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-rose-500/20 border border-gray-700 hover:border-rose-500/50 text-gray-300 hover:text-rose-400 rounded-xl py-3.5 font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Minus className="w-5 h-5" />
+            </button>
 
-          <button
-            onClick={handleIncrement}
-            className="w-16 h-16 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-all duration-150 active:scale-95 shadow-md shadow-blue-200 hover:shadow-lg"
-            aria-label="Verhoog teller"
-          >
-            <Plus className="w-6 h-6" />
-          </button>
+            <button
+              onClick={() => handleAction('reset')}
+              disabled={actionLoading || loading}
+              className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-amber-500/20 border border-gray-700 hover:border-amber-500/50 text-gray-300 hover:text-amber-400 rounded-xl py-3.5 font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
 
-          <button
-            onClick={handleReset}
-            className="w-14 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all duration-150 active:scale-95 hover:shadow-md"
-            aria-label="Reset teller"
-          >
-            <RotateCcw className="w-5 h-5" />
-          </button>
-        </div>
+            <button
+              onClick={() => handleAction('increment')}
+              disabled={actionLoading || loading}
+              className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 hover:border-indigo-400 text-white rounded-xl py-3.5 font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Plus className="w-5 h-5" />
+            </button>
+          </div>
 
-        {/* Save status */}
-        <div className="h-6 flex items-center justify-center">
-          {saveStatus === 'saving' && (
-            <span className="text-sm text-slate-400 animate-pulse">Opslaan…</span>
-          )}
-          {saveStatus === 'saved' && (
-            <span className="flex items-center gap-1.5 text-sm text-emerald-600">
-              <CheckCircle className="w-4 h-4" />
-              Opgeslagen ✓
-            </span>
-          )}
-          {saveStatus === 'error' && (
-            <span className="flex items-center gap-1.5 text-sm text-red-500">
-              <AlertCircle className="w-4 h-4" />
-              Opslaan mislukt
-            </span>
-          )}
-        </div>
+          {/* Log */}
+          <div className="border-t border-gray-800">
+            <div className="px-8 py-4 flex items-center justify-between">
+              <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest">Recente acties</p>
+              <span className="text-gray-600 text-xs">{logs.length} / 10</span>
+            </div>
 
-        {/* Legend */}
-        <div className="mt-6 pt-6 border-t border-slate-100 flex justify-center gap-6 text-xs text-slate-400">
-          <span>− Verlagen</span>
-          <span>+ Verhogen</span>
-          <span>↺ Reset</span>
+            <div className="px-8 pb-8 space-y-2">
+              {loading ? (
+                <div className="flex justify-center py-6">
+                  <div className="w-5 h-5 border-2 border-gray-700 border-t-indigo-500 rounded-full animate-spin" />
+                </div>
+              ) : logs.length === 0 ? (
+                <p className="text-gray-600 text-sm text-center py-4">Nog geen acties. Druk op een knop!</p>
+              ) : (
+                logs.map((log, i) => (
+                  <div
+                    key={log.id}
+                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl bg-gray-800/60 border border-gray-800 ${i === 0 ? 'ring-1 ring-indigo-500/30' : ''}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm font-bold w-16 ${actionColor[log.action as Action]}`}>
+                        {actionLabel[log.action as Action] ?? log.action}
+                      </span>
+                      <span className="text-gray-300 text-sm tabular-nums">→ {log.count_value}</span>
+                    </div>
+                    <span className="text-gray-600 text-xs tabular-nums">
+                      {new Date(log.created_at).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

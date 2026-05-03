@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app met Supabase logging. Een teller met increment, decrement en reset knoppen. Elke klik wordt gelogd in de Supabase `counter_logs` tabel. Gebouwd op Next.js 15 / Tailwind CSS 4.
+Counter app — een teller met increment, decrement en reset. Elke actie wordt opgeslagen in Supabase (`counter_logs`). Toont de laatste 10 acties als loglijst. Donker thema.
 
 Architecture Overview
 ====================
@@ -10,19 +10,31 @@ Key Components
 ==============
 
 - **Page** (`app/page.tsx`) — Server Component wrapper. Rendert `<Counter />`.
-- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert tellerwaarde via `useState`. Logt elke actie naar Supabase via `lib/supabase.ts`. Toont save-status (saving / saved / error).
+- **Counter** (`components/Counter.tsx`) — Client Component (`'use client'`). Beheert de tellerstate, laadt logs bij mount vanuit Supabase, handelt increment/decrement/reset af en insert elke actie in `counter_logs`.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
 - **Loading** (`app/loading.tsx`) — Route transition spinner.
 
+Database
+========
+- **counter_logs** — `id` (uuid PK), `action` (text: increment|decrement|reset), `count_value` (integer), `created_at` (timestamptz). RLS aan, anon mag insert + select.
+
+Env Vars
+========
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+
+Lib / Types
+===========
+- `lib/supabase.ts` — typed Supabase client (Database generic).
+- `types/database.ts` — Database type met `counter_logs` Row/Insert/Update.
+
 Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- Database: Supabase tabel `counter_logs` (id, action, count_value, created_at). RLS aan, anon insert + select policies actief.
-- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (in `.env.local`).
-- `lib/supabase.ts` exporteert een getypeerde Supabase client via `types/database.ts`.
+- Supabase client is typed via `Database` generic from `types/database.ts`.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
