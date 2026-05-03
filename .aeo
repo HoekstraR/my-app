@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter app met Supabase logging — elke klik (increment, decrement, reset) wordt opgeslagen in de `counter_logs` tabel. Bij mount wordt de laatste waarde opgehaald. Toont de laatste 5 acties in een loglijst.
+Teller-app — een simpele teller die elke klik (increment, decrement, reset) opslaat in Supabase. Toont de huidige stand en de laatste 5 acties. Gebouwd op Next.js 15 / Tailwind 4 / Supabase JS v2.
 
 Architecture Overview
 ====================
@@ -9,7 +9,10 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **LandingPage** (`app/page.tsx`) — Server Component. Welcome screen with hero, how-it-works, example prompts, and CTAs that route users to the AI chat. Stateless.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Rendert `<Counter />` gecentreerd op de pagina.
+- **Counter** (`components/Counter.tsx`) — Client Component. Beheert de tellerstand, logt elke actie naar Supabase, toont de laatste 5 logs als geschiedenis.
+- **supabase** (`lib/supabase.ts`) — Typed Supabase client (Database generic). Gebruikt `NEXT_PUBLIC_SUPABASE_URL` en `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- **Database types** (`types/database.ts`) — TypeScript definitie voor de `counter_logs` tabel.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -19,7 +22,9 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- No database. No env vars. No auth. No persistence — any state is ephemeral.
+- Supabase tabel `counter_logs` met kolommen: `id` (uuid), `action` ('increment' | 'decrement' | 'reset'), `count_value` (int), `created_at` (timestamptz).
+- Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` aanwezig in `.env.local`.
+- State wordt bewaard in Supabase; bij mount wordt de laatste `count_value` opgehaald.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
