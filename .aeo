@@ -1,16 +1,16 @@
 Project Summary
 ===============
-Counter App — een visueel aantrekkelijke teller met increment, decrement en reset. Gebouwd op de NextJS 15 / Tailwind 4 baseline. State is ephemeral (local React state).
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a placeholder HomePage component ready to be replaced by the user's app.
 
 Architecture Overview
 ====================
-Single-page Next.js App Router app. Server Components by default; any interactivity lives in client components under `components/`. Top-level routing files (`page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx`, `loading.tsx`) are all server components — `'use client'` NEVER appears at this level (breaks WebContainer prerendering). Styling is Tailwind CSS 4 via `@import "tailwindcss";` in `app/globals.css`.
+Single-page Next.js App Router app with Supabase persistence. Server Components by default; any interactivity lives in client components under `components/`. Top-level routing files (`page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx`, `loading.tsx`) are all server components — `'use client'` NEVER appears at this level (breaks WebContainer prerendering). Styling is Tailwind CSS 4 via `@import "tailwindcss";` in `app/globals.css`. Supabase client is initialised in `lib/supabase.ts`; types in `types/database.ts`.
 
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<Counter />`. Must stay a Server Component (WebContainer breaks with 'use client' at this level).
-- **Counter** (`components/Counter.tsx`) — Client Component ('use client'). Bevat de teller state (useState), drie knoppen (Plus, Minus, RotateCcw via lucide-react), en kleur-feedback op basis van positief/negatief/nul.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<Counter />`. Must stay a Server Component.
+- **Counter** (`components/Counter.tsx`) — Client Component. Main teller UI with increment/decrement/reset. Loads initial count from Supabase on mount, inserts a log row on every action, shows last 5 actions in real time.
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
@@ -24,7 +24,7 @@ Invariants
 ==========
 - `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
 - Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- No database. No env vars. No auth. No persistence — any state is ephemeral.
+- Supabase database with `counter_logs` table. Env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. RLS enabled with anon insert + select policies. No auth required.
 - `.env.local` exists at project root but is managed by the app (not written by agents directly).
 
 Notes for agents
