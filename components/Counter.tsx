@@ -11,7 +11,7 @@ export default function Counter() {
   const isNegative = count < 0;
 
   return (
-    <div className="min-h-screen bg-yellow-400 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 flex items-center justify-center p-8">
       <div className="flex flex-col items-center gap-10">
 
         {/* Title */}
