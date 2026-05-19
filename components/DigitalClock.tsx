@@ -66,9 +66,9 @@ export default function DigitalClock() {
   const { hh, mm, ss, seconds, dateStr, isoStr, srText } = useMemo(() => {
     if (!time) {
       return {
-        hh: ['0', '0'],
-        mm: ['0', '0'],
-        ss: ['0', '0'],
+        hh: ['0', '0'] as [string, string],
+        mm: ['0', '0'] as [string, string],
+        ss: ['0', '0'] as [string, string],
         seconds: 0,
         dateStr: '',
         isoStr: '',
@@ -82,9 +82,9 @@ export default function DigitalClock() {
     const paddedM = pad(m)
     const paddedS = pad(s)
     return {
-      hh: [padded[0], padded[1]],
-      mm: [paddedM[0], paddedM[1]],
-      ss: [paddedS[0], paddedS[1]],
+      hh: [padded[0], padded[1]] as [string, string],
+      mm: [paddedM[0], paddedM[1]] as [string, string],
+      ss: [paddedS[0], paddedS[1]] as [string, string],
       seconds: s,
       dateStr: formatDate(time),
       isoStr: time.toISOString(),
