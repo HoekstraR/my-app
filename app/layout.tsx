@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HealthSignal from "@/components/HealthSignal";
-// JetBrains Mono is loaded inside DigitalClock as a component-level font
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Futuristische Digitale Klok",
-  description: "Een cyberpunk digitale klok — neon cyan op een zwart scherm met scanlines, digit flip animaties en een pulserende progressiebalk.",
+  title: "Your Website - Ready to Customize!",
+  description: "This is your starter website. Chat with AI to transform it into exactly what you need - no technical skills required!",
 };
 
 export default function RootLayout({

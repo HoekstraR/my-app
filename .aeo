@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Futuristische Digitale Klok — een cyberpunk-stijl real-time klok op een donker scherm. Neon cyan cijfers met glow-effecten, scanlines overlay, digit flip animaties, progressiebalk voor seconden en floating particles. Full-viewport display zonder interactie. Gebaseerd op het design spec uit `.walden-memories/design-spec.md`.
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a placeholder HomePage component ready to be replaced by the user's app.
 
 Architecture Overview
 ====================
@@ -9,15 +9,8 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<DigitalClock />`.
-- **DigitalClock** (`components/DigitalClock.tsx`) — Hoofd client component. Laadt JetBrains Mono, gebruikt `useTime`, coördineert alle sub-componenten, handelt minuut/uur-flash af.
-- **BackgroundLayer** (`components/clock/BackgroundLayer.tsx`) — Animated radial gradients + floating particles. Client component.
-- **ScanlineOverlay** (`components/clock/ScanlineOverlay.tsx`) — Fixed scanlines overlay. Server component.
-- **ClockDigit** (`components/clock/ClockDigit.tsx`) — Individueel cijfer met digit-in flip animatie via React key. Client component.
-- **ClockColon** (`components/clock/ClockColon.tsx`) — Pulserende dubbele punt met colon-pulse animatie.
-- **DateDisplay** (`components/clock/DateDisplay.tsx`) — Nederlandse datumopmaak met groeiende decoratielijnen.
-- **SecondsBar** (`components/clock/SecondsBar.tsx`) — Horizontale progressiebalk (0→60s) met cyan glow. Client component.
-- **useTime** (`hooks/useTime.ts`) — Custom hook: `useState<Date>` + `setInterval(1000)`. Initialiseert op `null` (SSR-safe), update elke seconde.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<HomePage />`. Must stay a Server Component (WebContainer breaks with 'use client' at this level).
+- **HomePage** (`components/HomePage.tsx`) — Placeholder component. This is the file Dex replaces with the user's actual app. Can be a client component ('use client').
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.

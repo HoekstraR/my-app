@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050810;
-  --foreground: #e8f4f8;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @theme inline {
@@ -12,76 +12,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
 body {
-  background: #050810;
+  background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-/* ─── Colon pulse ─── */
-@keyframes colon-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.25; }
-}
-.colon-pulse {
-  animation: colon-pulse 1s ease-in-out infinite;
-}
-
-/* ─── Digit flip-in ─── */
-@keyframes digit-in {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0);     opacity: 1; }
-}
-.digit-in {
-  animation: digit-in 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-/* ─── Background breathe ─── */
-@keyframes bg-breathe {
-  0%   { background-position: 25% 60%, 75% 40%; }
-  100% { background-position: 35% 50%, 65% 50%; }
-}
-.bg-breathe {
-  animation: bg-breathe 10s ease-in-out infinite alternate;
-}
-
-/* ─── Floating particles ─── */
-@keyframes float-particle {
-  0%   { transform: translateY(0);     opacity: 0; }
-  20%  { opacity: 0.5; }
-  80%  { opacity: 0.3; }
-  100% { transform: translateY(-80vh); opacity: 0; }
-}
-.float-particle {
-  animation: float-particle 14s ease-in-out infinite;
-  position: fixed;
-}
-
-/* ─── Date line grow ─── */
-@keyframes date-line-grow {
-  from { width: 0; }
-  to   { width: 100%; }
-}
-.date-line {
-  animation: date-line-grow 1.5s ease-out forwards;
-}
-
-/* ─── Mount fade-in ─── */
-@keyframes mount-fade {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.mount-fade {
-  opacity: 0;
-  animation: mount-fade 0.8s ease-out forwards;
-}
-
-/* ─── Reduced motion ─── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
 }
