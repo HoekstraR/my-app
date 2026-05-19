@@ -29,7 +29,7 @@ function getTimeState(now: Date): TimeState {
   const m = String(now.getMinutes()).padStart(2, '0');
   const s = String(now.getSeconds()).padStart(2, '0');
 
-  const day = DAYS_NL[now.getDay()];
+  const day = DAYS_NL[now.getDay()] ?? 'ONBEKEND';
   const date = `${day.slice(0, 2)} ${String(now.getDate()).padStart(2, '0')} ${MONTHS_NL[now.getMonth()]} ${now.getFullYear()}`;
 
   let tz = 'UTC';
