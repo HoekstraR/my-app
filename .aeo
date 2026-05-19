@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Counter App — een visueel aantrekkelijke teller met increment, decrement en reset. Gebouwd op de NextJS 15 / Tailwind 4 baseline. State is ephemeral (local React state).
+Futuristische Digitale Klok — een cyberpunk × glassmorphism klok-app met real-time tijdsweergave. Donkere achtergrond (#050810), neon accenten (cyaan #00FFC8, blauw #00B4FF, magenta #FF00A8). Typografie via Google Fonts (Orbitron + Share Tech Mono). Animaties: glow pulse op cijfers, knipperend dubbele punt, scanline CRT-effect, zwevende achtergrond blobs, fade-in bij mount. Volledig responsief en respecteert prefers-reduced-motion.
 
 Architecture Overview
 ====================
@@ -9,9 +9,9 @@ Single-page Next.js App Router app. Server Components by default; any interactiv
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<Counter />`. Must stay a Server Component (WebContainer breaks with 'use client' at this level).
-- **Counter** (`components/Counter.tsx`) — Client Component ('use client'). Bevat de teller state (useState), drie knoppen (Plus, Minus, RotateCcw via lucide-react), en kleur-feedback op basis van positief/negatief/nul.
-- **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
+- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<Clock />`. Must stay a Server Component.
+- **Clock** (`components/Clock.tsx`) — Client Component (`'use client'`). Owns all real-time state (hours/minutes/seconds via setInterval). Renders het volledige klok-UI: glasspaneel, tijdweergave, datum, dag, timezone, LIVE indicator, glow blobs.
+- **RootLayout** (`app/layout.tsx`) — Root HTML shell. Laadt Orbitron + Share Tech Mono via Google Fonts `<link>` tag (WebContainer kan next/font/google niet resolven). Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
 - **Loading** (`app/loading.tsx`) — Route transition spinner.
