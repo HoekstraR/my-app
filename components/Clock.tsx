@@ -70,7 +70,7 @@ export default function Clock() {
   if (!time) {
     return (
       <div
-        style={{ backgroundColor: '#050810', minHeight: '100vh' }}
+        style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}
         className="flex items-center justify-center"
       />
     );
@@ -78,51 +78,12 @@ export default function Clock() {
 
   return (
     <main
-      className="scanlines relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundColor: '#050810',
-        backgroundImage:
-          'radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
+        backgroundColor: '#ffffff',
       }}
     >
-      {/* Glow blob 1 — cyaan, links boven */}
-      <div
-        aria-hidden="true"
-        className="blob-float"
-        style={{
-          position: 'fixed',
-          top: '-10%',
-          left: '-10%',
-          width: '600px',
-          height: '600px',
-          borderRadius: '50%',
-          backgroundColor: '#00FFC8',
-          opacity: 0.06,
-          filter: 'blur(120px)',
-          pointerEvents: 'none',
-          animationDuration: '8s',
-        }}
-      />
 
-      {/* Glow blob 2 — blauw, rechts onder */}
-      <div
-        aria-hidden="true"
-        className="blob-float-reverse"
-        style={{
-          position: 'fixed',
-          bottom: '-10%',
-          right: '-10%',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          backgroundColor: '#00B4FF',
-          opacity: 0.06,
-          filter: 'blur(120px)',
-          pointerEvents: 'none',
-          animationDuration: '8s',
-        }}
-      />
 
       {/* Glasspaneel */}
       <div
