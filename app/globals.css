@@ -1,109 +1,117 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Futuristische klok — keyframe animaties ──────────────────────── */
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
-/* ─── Cyberpunk Clock — font utilities ─────────────────────────────── */
-.font-jetbrains {
-  font-family: var(--font-jetbrains), 'Courier New', monospace;
-}
-.font-sharetech {
-  font-family: var(--font-sharetech), 'Courier New', monospace;
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px #00FFC8, 0 0 40px rgba(0,255,200,0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px #00FFC8, 0 0 60px rgba(0,255,200,0.6), 0 0 100px rgba(0,255,200,0.25);
+  }
 }
 
-/* ─── Scanlines overlay ─────────────────────────────────────────────── */
-.scanlines {
+@keyframes glowPulseBlue {
+  0%, 100% {
+    text-shadow: 0 0 20px #00B4FF, 0 0 40px rgba(0,180,255,0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px #00B4FF, 0 0 60px rgba(0,180,255,0.6), 0 0 100px rgba(0,180,255,0.25);
+  }
+}
+
+@keyframes glowPulseMagenta {
+  0%, 100% {
+    text-shadow: 0 0 20px #FF00A8, 0 0 40px rgba(255,0,168,0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px #FF00A8, 0 0 60px rgba(255,0,168,0.6), 0 0 100px rgba(255,0,168,0.25);
+  }
+}
+
+@keyframes blobFloat {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.15) translate(20px, -20px); }
+}
+
+/* ─── Utility klassen ───────────────────────────────────────────────── */
+
+.blink {
+  animation: blink 1s step-start infinite;
+}
+
+.glow-cyan {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.glow-blue {
+  animation: glowPulseBlue 3s ease-in-out infinite;
+}
+
+.glow-magenta {
+  animation: glowPulseMagenta 3s ease-in-out infinite;
+}
+
+.blob-float {
+  animation: blobFloat 8s ease-in-out infinite alternate;
+}
+
+.blob-float-reverse {
+  animation: blobFloat 8s ease-in-out infinite alternate-reverse;
+}
+
+/* ─── Scanline CRT overlay ──────────────────────────────────────────── */
+
+.scanlines::before {
+  content: '';
+  position: fixed;
+  inset: 0;
   background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 3px,
-    rgba(0, 0, 0, 0.18) 3px,
-    rgba(0, 0, 0, 0.18) 4px
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
   );
-  animation: scanlines-flicker 8s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+  aria-hidden: true;
 }
 
-@keyframes scanlines-flicker {
-  0%,  100% { opacity: 0.55; }
-  50%        { opacity: 0.45; }
+/* ─── Paneel hover border glow ──────────────────────────────────────── */
+
+.clock-panel {
+  border-color: rgba(255,255,255,0.09);
+  transition: border-color 500ms;
 }
 
-/* ─── Scan sweep ────────────────────────────────────────────────────── */
-@keyframes scan-sweep {
-  0%   { top: -2px;   opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
-  100% { top: 100%;  opacity: 0; }
+.clock-panel:hover {
+  border-color: rgba(0,255,200,0.35) !important;
+  box-shadow:
+    0 0 80px rgba(0,255,200,0.12),
+    0 0 160px rgba(0,255,200,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.1) !important;
 }
 
-.scan-sweep {
-  animation: scan-sweep 4s linear infinite;
-}
-
-/* ─── Colon blink ───────────────────────────────────────────────────── */
-@keyframes colon-blink {
-  0%, 49%  { opacity: 1; }
-  50%, 100% { opacity: 0.15; }
-}
-
-.colon-blink {
-  animation: colon-blink 1s step-end infinite;
-}
-
-/* ─── Digit slide-in (seconds) ──────────────────────────────────────── */
-@keyframes digit-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.digit-slide-in {
-  animation: digit-slide-in 0.18s ease-out both;
-}
-
-/* ─── Status dot pulse ──────────────────────────────────────────────── */
-@keyframes status-dot-pulse {
-  0%, 100% { opacity: 1;   text-shadow: 0 0 4px #39ff14, 0 0 10px #39ff14; }
-  50%       { opacity: 0.4; text-shadow: none; }
-}
-
-.status-dot-pulse {
-  animation: status-dot-pulse 2s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scanlines,
-  .scan-sweep,
-  .colon-blink,
-  .digit-slide-in,
-  .status-dot-pulse {
-    animation: none;
-  }
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Global reset voor donker thema ────────────────────────────────── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #050810;
+  color: #E8FFF8;
+  font-family: 'Share Tech Mono', monospace;
+  margin: 0;
+}
+
+/* ─── Reduced motion fallback ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

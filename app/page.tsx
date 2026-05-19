@@ -8,8 +8,8 @@
  * Dex writes the actual app in components/HomePage.tsx (which CAN be
  * a client component). This wrapper just renders it.
  */
-import HomePage from '@/components/HomePage';
+import Clock from '@/components/Clock';
 
 export default function Page() {
-  return <HomePage />;
+  return <Clock />;
 }
