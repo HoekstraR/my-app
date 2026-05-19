@@ -5,6 +5,89 @@
   --foreground: #171717;
 }
 
+/* ─── Cyberpunk Clock — font utilities ─────────────────────────────── */
+.font-jetbrains {
+  font-family: var(--font-jetbrains), 'Courier New', monospace;
+}
+.font-sharetech {
+  font-family: var(--font-sharetech), 'Courier New', monospace;
+}
+
+/* ─── Scanlines overlay ─────────────────────────────────────────────── */
+.scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  animation: scanlines-flicker 8s linear infinite;
+}
+
+@keyframes scanlines-flicker {
+  0%,  100% { opacity: 0.55; }
+  50%        { opacity: 0.45; }
+}
+
+/* ─── Scan sweep ────────────────────────────────────────────────────── */
+@keyframes scan-sweep {
+  0%   { top: -2px;   opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { top: 100%;  opacity: 0; }
+}
+
+.scan-sweep {
+  animation: scan-sweep 4s linear infinite;
+}
+
+/* ─── Colon blink ───────────────────────────────────────────────────── */
+@keyframes colon-blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0.15; }
+}
+
+.colon-blink {
+  animation: colon-blink 1s step-end infinite;
+}
+
+/* ─── Digit slide-in (seconds) ──────────────────────────────────────── */
+@keyframes digit-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.digit-slide-in {
+  animation: digit-slide-in 0.18s ease-out both;
+}
+
+/* ─── Status dot pulse ──────────────────────────────────────────────── */
+@keyframes status-dot-pulse {
+  0%, 100% { opacity: 1;   text-shadow: 0 0 4px #39ff14, 0 0 10px #39ff14; }
+  50%       { opacity: 0.4; text-shadow: none; }
+}
+
+.status-dot-pulse {
+  animation: status-dot-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanlines,
+  .scan-sweep,
+  .colon-blink,
+  .digit-slide-in,
+  .status-dot-pulse {
+    animation: none;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

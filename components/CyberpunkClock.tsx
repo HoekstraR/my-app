@@ -40,7 +40,7 @@ function getTimeState(): TimeState {
 }
 
 export default function CyberpunkClock() {
-  const [time, setTime] = useState<TimeState>(getTimeState);
+  const [time, setTime] = useState<TimeState | null>(null);
   const [secKey, setSecKey] = useState(0);
   const [flickering, setFlickering] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -55,26 +55,32 @@ export default function CyberpunkClock() {
   }, []);
 
   useEffect(() => {
+    // Bug 2 fix: set initial time on client only (avoids hydration mismatch)
+    setTime(getTimeState());
+
     const tick = () => {
       const next = getTimeState();
       setTime(prev => {
-        if (prev.seconds !== next.seconds) {
+        if (prev && prev.seconds !== next.seconds) {
           setSecKey(k => k + 1);
         }
         return next;
       });
     };
 
-    // Align to the next full second
+    // Bug 1 fix: hoist both IDs to outer scope so cleanup can clear both
+    let intervalId: ReturnType<typeof setInterval> | null = null;
     const now = Date.now();
     const delay = 1000 - (now % 1000);
     const alignTimeout = setTimeout(() => {
       tick();
-      const interval = setInterval(tick, 1000);
-      return () => clearInterval(interval);
+      intervalId = setInterval(tick, 1000);
     }, delay);
 
-    return () => clearTimeout(alignTimeout);
+    return () => {
+      clearTimeout(alignTimeout);
+      if (intervalId !== null) clearInterval(intervalId);
+    };
   }, []);
 
   const scheduleFlicker = useCallback(() => {
@@ -235,10 +241,10 @@ export default function CyberpunkClock() {
             {/* Left: day + date */}
             <div className="flex flex-col gap-0.5">
               <span className="text-xs tracking-[0.4em] text-[#4a7a8a] uppercase font-sharetech">
-                {time.dayName}
+                {displayTime.dayName}
               </span>
               <span className="text-base tracking-[0.25em] text-[#4a7a8a] font-sharetech">
-                {time.dateStr}
+                {displayTime.dateStr}
               </span>
             </div>
 
@@ -248,10 +254,10 @@ export default function CyberpunkClock() {
                 className="border border-[#bf00ff] px-2 py-0.5 text-sm font-bold tracking-[0.3em] text-[#bf00ff] font-sharetech"
                 style={{ filter: 'drop-shadow(0 0 6px #bf00ff)' }}
               >
-                {time.ampm}
+                {displayTime.ampm}
               </span>
               <span className="text-xs tracking-[0.35em] text-[#4a7a8a] uppercase font-sharetech">
-                {time.timezone}
+                {displayTime.timezone}
               </span>
             </div>
           </div>
