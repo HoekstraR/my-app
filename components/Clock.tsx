@@ -124,6 +124,23 @@ export default function Clock() {
         }}
       />
 
+      {/* Logo — fixed rechterbovenhoek */}
+      <img
+        src="/logo.png"
+        alt="Logo"
+        aria-hidden="false"
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1.25rem',
+          height: 'clamp(2.5rem, 5vw, 3.5rem)',
+          width: 'auto',
+          zIndex: 50,
+          pointerEvents: 'none',
+          filter: 'drop-shadow(0 0 8px rgba(0,255,200,0.6)) drop-shadow(0 0 16px rgba(0,180,255,0.3))',
+        }}
+      />
+
       {/* Glasspaneel */}
       <div
         className="clock-panel relative z-10 w-[90vw] max-w-2xl rounded-2xl transition-all duration-500"
@@ -139,21 +156,6 @@ export default function Clock() {
         }}
       >
         {/* Hover-state lichte border — via CSS class */}
-        {/* Logo — linkerbovenhoek van het glasspaneel */}
-        <img
-          src="/Logo%20(6).png"
-          alt="Logo"
-          style={{
-            position: 'absolute',
-            top: '1rem',
-            left: '1rem',
-            width: '80px',
-            height: 'auto',
-            pointerEvents: 'none',
-            filter: 'drop-shadow(0 0 8px #00FFC8) drop-shadow(0 0 18px #00B4FF)',
-            opacity: 0.92,
-          }}
-        />
         <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
 
           {/* Label */}
