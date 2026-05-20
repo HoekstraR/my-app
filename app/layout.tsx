@@ -22,79 +22,24 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <HealthSignal />
-        {/* Logo — fixed top-right, SVG text fallback (WebContainer: no public/ uploads) */}
-        <div
+        {/* Logo — fixed top-right, uploaded PNG via URL-encoded public path */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/Logo%20(6).png"
+          alt="Logo"
           style={{
             position: 'fixed',
             top: '16px',
             right: '16px',
             zIndex: 50,
+            height: '48px',
+            width: 'auto',
             pointerEvents: 'none',
             userSelect: 'none',
+            filter:
+              'drop-shadow(0 0 6px rgba(0,255,200,0.9)) drop-shadow(0 0 14px rgba(0,255,200,0.55)) drop-shadow(0 0 30px rgba(0,255,200,0.25))',
           }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="120"
-            height="40"
-            viewBox="0 0 120 40"
-            aria-label="CLOCK logo"
-            role="img"
-          >
-            <defs>
-              <filter id="neon-glow" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="2.5" result="blur1" />
-                <feGaussianBlur stdDeviation="5" result="blur2" />
-                <feMerge>
-                  <feMergeNode in="blur2" />
-                  <feMergeNode in="blur1" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            {/* Outer glow layer */}
-            <text
-              x="60"
-              y="30"
-              textAnchor="middle"
-              fontFamily="Orbitron, monospace"
-              fontWeight="900"
-              fontSize="26"
-              fill="none"
-              stroke="rgba(0,255,200,0.25)"
-              strokeWidth="8"
-            >
-              CLOCK
-            </text>
-            {/* Mid glow layer */}
-            <text
-              x="60"
-              y="30"
-              textAnchor="middle"
-              fontFamily="Orbitron, monospace"
-              fontWeight="900"
-              fontSize="26"
-              fill="none"
-              stroke="rgba(0,255,200,0.55)"
-              strokeWidth="4"
-            >
-              CLOCK
-            </text>
-            {/* Core text */}
-            <text
-              x="60"
-              y="30"
-              textAnchor="middle"
-              fontFamily="Orbitron, monospace"
-              fontWeight="900"
-              fontSize="26"
-              fill="#00FFC8"
-              filter="url(#neon-glow)"
-            >
-              CLOCK
-            </text>
-          </svg>
-        </div>
+        />
         {children}
       </body>
     </html>
