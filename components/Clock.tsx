@@ -139,6 +139,21 @@ export default function Clock() {
         }}
       >
         {/* Hover-state lichte border — via CSS class */}
+        {/* Logo — rechterbovenhoek van het glasspaneel */}
+        <img
+          src="/Logo (6).png"
+          alt="Logo"
+          style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            width: '80px',
+            height: 'auto',
+            pointerEvents: 'none',
+            filter: 'drop-shadow(0 0 8px #00FFC8) drop-shadow(0 0 18px #00B4FF)',
+            opacity: 0.92,
+          }}
+        />
         <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
 
           {/* Label */}
