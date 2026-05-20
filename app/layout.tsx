@@ -33,7 +33,7 @@ export default function RootLayout({
           }}
         >
           <img
-            src="/logo.png"
+            src="/Logo (6).png"
             alt="Logo"
             style={{
               width: "120px",
