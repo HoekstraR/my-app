@@ -86,14 +86,6 @@ export default function Clock() {
         backgroundSize: '40px 40px',
       }}
     >
-      {/* Logo — fixed rechtsboven */}
-      <img
-        src="/Logo.png"
-        alt="Logo"
-        className="fixed top-4 right-4 z-50 h-12 w-auto object-contain"
-        aria-label="Logo"
-      />
-
       {/* Glow blob 1 — cyaan, links boven */}
       <div
         aria-hidden="true"
@@ -146,8 +138,16 @@ export default function Clock() {
           transition: 'opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms, border-color 500ms',
         }}
       >
+        {/* Logo — rechtsboven in glasspaneel */}
+        <img
+          src="/Logo.png"
+          alt="Logo"
+          className="absolute top-3 right-3 h-10 w-auto object-contain"
+          aria-label="Logo"
+        />
+
         {/* Hover-state lichte border — via CSS class */}
-        <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
+        <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10"></div>
 
           {/* Label */}
           <p
