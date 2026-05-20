@@ -141,7 +141,7 @@ export default function Clock() {
         {/* Hover-state lichte border — via CSS class */}
         {/* Logo — rechterbovenhoek van het glasspaneel */}
         <img
-          src="/Logo (6).png"
+          src="/Logo%20(6).png"
           alt="Logo"
           style={{
             position: 'absolute',
