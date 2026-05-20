@@ -80,7 +80,7 @@ export default function Clock() {
     <>
       {/* Logo — fixed rechtsboven */}
       <img
-        src="/Logo (6).png"
+        src="/Logo%20(6).png"
         alt="Logo"
         aria-hidden="true"
         style={{
