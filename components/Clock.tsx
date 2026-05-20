@@ -126,7 +126,7 @@ export default function Clock() {
 
       {/* Logo — fixed rechterbovenhoek */}
       <img
-        src="/logo.png"
+        src="/Logo (6).png"
         alt="Logo"
         aria-hidden="false"
         style={{
