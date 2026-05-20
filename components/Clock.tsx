@@ -142,9 +142,9 @@ export default function Clock() {
         <img
           src="/Logo.png"
           alt="Logo"
-          className="absolute top-3 left-3 h-10 w-auto object-contain"
-          aria-label="Logo"
-        />
+          className="absolute top-3 left-3 h-10 w-auto object-contain z-20"
+        /></find>
+
 
         {/* Hover-state lichte border — via CSS class */}
         <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
