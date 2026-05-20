@@ -22,24 +22,28 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <HealthSignal />
-        {/* Logo — fixed top-right, uploaded PNG via URL-encoded public path */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/Logo%20(6).png"
-          alt="Logo"
+        {/* Logo — fixed top-right, visible on every page */}
+        <div
           style={{
-            position: 'fixed',
-            top: '16px',
-            right: '16px',
-            zIndex: 50,
-            height: '48px',
-            width: 'auto',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            filter:
-              'drop-shadow(0 0 6px rgba(0,255,200,0.9)) drop-shadow(0 0 14px rgba(0,255,200,0.55)) drop-shadow(0 0 30px rgba(0,255,200,0.25))',
+            position: "fixed",
+            top: "1rem",
+            right: "1rem",
+            zIndex: 9999,
+            pointerEvents: "none",
           }}
-        />
+        >
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{
+              width: "120px",
+              height: "auto",
+              display: "block",
+              filter: "drop-shadow(0 0 8px #00FFC8) drop-shadow(0 0 18px #00B4FF)",
+              opacity: 0.92,
+            }}
+          />
+        </div>
         {children}
       </body>
     </html>
