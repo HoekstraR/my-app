@@ -147,7 +147,7 @@ export default function Clock() {
         />
 
         {/* Hover-state lichte border — via CSS class */}
-        <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10"></div>
+        <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
 
           {/* Label */}
           <p
