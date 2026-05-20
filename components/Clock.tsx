@@ -138,11 +138,11 @@ export default function Clock() {
           transition: 'opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms, border-color 500ms',
         }}
       >
-        {/* Logo — rechtsboven in glasspaneel */}
+        {/* Logo — linksboven in glasspaneel */}
         <img
           src="/Logo.png"
           alt="Logo"
-          className="absolute top-3 right-3 h-10 w-auto object-contain"
+          className="absolute top-3 left-3 h-10 w-auto object-contain"
           aria-label="Logo"
         />
 
