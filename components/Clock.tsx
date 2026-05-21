@@ -70,7 +70,7 @@ export default function Clock() {
   if (!time) {
     return (
       <div
-        style={{ backgroundColor: '#050810', minHeight: '100vh' }}
+        style={{ backgroundColor: '#FFFF00', minHeight: '100vh' }}
         className="flex items-center justify-center"
       />
     );
@@ -80,7 +80,7 @@ export default function Clock() {
     <main
       className="scanlines relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundColor: '#050810',
+        backgroundColor: '#FFFF00',
         backgroundImage:
           'radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
@@ -121,23 +121,6 @@ export default function Clock() {
           filter: 'blur(120px)',
           pointerEvents: 'none',
           animationDuration: '8s',
-        }}
-      />
-
-      {/* Logo — fixed rechterbovenhoek */}
-      <img
-        src="/Logo (6).png"
-        alt="Logo"
-        aria-hidden="false"
-        style={{
-          position: 'fixed',
-          top: '1rem',
-          right: '1.25rem',
-          height: 'clamp(2.5rem, 5vw, 3.5rem)',
-          width: 'auto',
-          zIndex: 50,
-          pointerEvents: 'none',
-          filter: 'drop-shadow(0 0 8px rgba(0,255,200,0.6)) drop-shadow(0 0 16px rgba(0,180,255,0.3))',
         }}
       />
 
