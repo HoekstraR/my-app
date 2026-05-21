@@ -70,7 +70,7 @@ export default function Clock() {
   if (!time) {
     return (
       <div
-        style={{ backgroundColor: '#FFFF00', minHeight: '100vh' }}
+        style={{ backgroundColor: '#FFE600', minHeight: '100vh' }}
         className="flex items-center justify-center"
       />
     );
@@ -80,28 +80,12 @@ export default function Clock() {
     <main
       className="scanlines relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundColor: '#FFFF00',
+        backgroundColor: '#FFE600',
         backgroundImage:
           'radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
       }}
     >
-      {/* Logo — fixed rechtsboven */}
-      <img
-        src="/logo.png"
-        alt="Logo"
-        style={{
-          position: 'fixed',
-          top: '1rem',
-          right: '1rem',
-          width: '120px',
-          height: 'auto',
-          zIndex: 50,
-          pointerEvents: 'none',
-          filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.18))',
-        }}
-      />
-
       {/* Glow blob 1 — cyaan, links boven */}
       <div
         aria-hidden="true"
