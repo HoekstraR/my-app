@@ -87,6 +87,23 @@ export default function Clock() {
       }}
     >
       {/* Glow blob 1 — cyaan, links boven */}
+
+      {/* Logo — fixed rechtsboven, zweeft over de UI */}
+      <img
+        src="/Logo (6).png"
+        alt="Logo"
+        style={{
+          position: 'fixed',
+          top: '1.25rem',
+          right: '1.5rem',
+          maxWidth: '120px',
+          width: 'auto',
+          height: 'auto',
+          zIndex: 50,
+          pointerEvents: 'none',
+        }}
+      />
+
       <div
         aria-hidden="true"
         className="blob-float"
