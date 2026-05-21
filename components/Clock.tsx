@@ -140,7 +140,7 @@ export default function Clock() {
       >
         {/* Logo — rechtsboven in glasspaneel */}
         <img
-          src="/logo.png"
+          src="/logo_mdi.png"
           alt="Logo"
           style={{
             position: 'absolute',
