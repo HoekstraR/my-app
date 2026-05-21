@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface TimeState {
   hours: string;
@@ -70,7 +71,7 @@ export default function Clock() {
   if (!time) {
     return (
       <div
-        style={{ backgroundColor: '#FFE600', minHeight: '100vh' }}
+        style={{ backgroundColor: '#050810', minHeight: '100vh' }}
         className="flex items-center justify-center"
       />
     );
@@ -80,30 +81,34 @@ export default function Clock() {
     <main
       className="scanlines relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        backgroundColor: '#FFE600',
+        backgroundColor: '#050810',
         backgroundImage:
           'radial-gradient(circle, rgba(0,255,200,0.08) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
       }}
     >
-      {/* Glow blob 1 — cyaan, links boven */}
-
-      {/* Logo — fixed rechtsboven, zweeft over de UI */}
-      <img
-        src="/Logo.png"
-        alt="Logo"
+      {/* Logo — fixed rechtsboven */}
+      <div
         style={{
           position: 'fixed',
           top: '1.25rem',
           right: '1.5rem',
-          maxWidth: '120px',
-          width: 'auto',
-          height: 'auto',
           zIndex: 50,
           pointerEvents: 'none',
         }}
-      />
+        aria-hidden="true"
+      >
+        <Image
+          src="/Logo (6).png"
+          alt="Logo"
+          width={120}
+          height={48}
+          style={{ objectFit: 'contain', height: '48px', width: 'auto' }}
+          priority
+        />
+      </div>
 
+      {/* Glow blob 1 — cyaan, links boven */}
       <div
         aria-hidden="true"
         className="blob-float"
