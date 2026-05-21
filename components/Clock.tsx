@@ -99,7 +99,7 @@ export default function Clock() {
         aria-hidden="true"
       >
         <Image
-          src="/Logo (6).png"
+          src="/Logo.png"
           alt="Logo"
           width={120}
           height={48}
