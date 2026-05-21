@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 interface TimeState {
   hours: string;
@@ -87,27 +86,6 @@ export default function Clock() {
         backgroundSize: '40px 40px',
       }}
     >
-      {/* Logo — fixed rechtsboven */}
-      <div
-        style={{
-          position: 'fixed',
-          top: '1.25rem',
-          right: '1.5rem',
-          zIndex: 50,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <Image
-          src="/Logo.png"
-          alt="Logo"
-          width={120}
-          height={48}
-          style={{ objectFit: 'contain', height: '48px', width: 'auto' }}
-          priority
-        />
-      </div>
-
       {/* Glow blob 1 — cyaan, links boven */}
       <div
         aria-hidden="true"
@@ -160,6 +138,23 @@ export default function Clock() {
           transition: 'opacity 800ms ease-out 200ms, transform 800ms ease-out 200ms, border-color 500ms',
         }}
       >
+        {/* Logo — rechtsboven in glasspaneel */}
+        <img
+          src="/logo.png"
+          alt="Logo"
+          style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1.25rem',
+            height: '48px',
+            width: 'auto',
+            filter:
+              'drop-shadow(0 0 8px rgba(0,255,200,0.55)) drop-shadow(0 0 20px rgba(0,255,200,0.25))',
+            opacity: 0.92,
+            pointerEvents: 'none',
+            userSelect: 'none',
+          }}
+        />
         {/* Hover-state lichte border — via CSS class */}
         <div className="clock-inner px-6 py-8 sm:px-10 sm:py-9 lg:px-12 lg:py-10">
 
