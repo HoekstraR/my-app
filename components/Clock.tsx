@@ -86,6 +86,20 @@ export default function Clock() {
         backgroundSize: '40px 40px',
       }}
     >
+      {/* Logo — fixed rechtsboven, buiten glasspaneel */}
+      <img
+        src="/logo.png"
+        alt="Logo"
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          right: '1.5rem',
+          zIndex: 50,
+          width: '120px',
+          height: 'auto',
+        }}
+      />
+
       {/* Glow blob 1 — oranje, links boven */}
       <div
         aria-hidden="true"
