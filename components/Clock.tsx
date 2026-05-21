@@ -90,7 +90,7 @@ export default function Clock() {
 
       {/* Logo — fixed rechtsboven, zweeft over de UI */}
       <img
-        src="/Logo (6).png"
+        src="/Logo.png"
         alt="Logo"
         style={{
           position: 'fixed',
