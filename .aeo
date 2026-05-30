@@ -1,6 +1,6 @@
 Project Summary
 ===============
-Teller app — een simpele counter met increment, decrement en reset. Dark-mode styling met Tailwind CSS, lucide-react iconen. Volledig client-side, geen persistence.
+NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a placeholder HomePage component ready to be replaced by the user's app.
 
 Architecture Overview
 ====================
@@ -10,7 +10,7 @@ Key Components
 ==============
 
 - **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<HomePage />`. Must stay a Server Component (WebContainer breaks with 'use client' at this level).
-- **HomePage** (`components/HomePage.tsx`) — Client Component (`'use client'`). Teller app met `useState`. Toont de huidige waarde en drie knoppen: increment (+), decrement (−) en reset. Gebruikt `lucide-react` voor iconen.
+- **HomePage** (`components/HomePage.tsx`) — Placeholder component. This is the file Dex replaces with the user's actual app. Can be a client component ('use client').
 - **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
 - **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
 - **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
