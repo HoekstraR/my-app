@@ -7,35 +7,22 @@ import { Plus, Minus, RotateCcw } from 'lucide-react';
 export default function Counter() {
   const [count, setCount] = useState(0);
 
-  const isNegative = count < 0;
-  const isPositive = count > 0;
+  const increment = () => setCount((c) => c + 1);
+  const decrement = () => setCount((c) => Math.max(0, c - 1));
+  const reset = () => setCount(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-12 flex flex-col items-center gap-10 shadow-2xl">
 
         {/* Title */}
-        <h1 className="text-slate-400 text-sm font-semibold uppercase tracking-[0.25em]">
+        <h1 className="text-white/70 text-xl font-semibold tracking-widest uppercase">
           Teller
         </h1>
 
-        {/* Count display */}
-        <div className="relative flex items-center justify-center w-56 h-56 rounded-full bg-slate-800 shadow-[0_0_80px_rgba(0,0,0,0.6)] border border-slate-700">
-          {/* Subtle glow ring */}
-          <div
-            className={`absolute inset-0 rounded-full transition-all duration-500 blur-xl opacity-20 ${
-              isPositive ? 'bg-emerald-400' : isNegative ? 'bg-rose-400' : 'bg-slate-500'
-            }`}
-          />
-          <span
-            className={`relative text-7xl font-black tabular-nums transition-colors duration-300 ${
-              isPositive
-                ? 'text-emerald-400'
-                : isNegative
-                ? 'text-rose-400'
-                : 'text-slate-200'
-            }`}
-          >
+        {/* Counter display */}
+        <div className="flex items-center justify-center w-48 h-48 rounded-full bg-white/10 border-4 border-white/20 shadow-inner">
+          <span className="text-7xl font-bold text-white tabular-nums">
             {count}
           </span>
         </div>
@@ -45,37 +32,41 @@ export default function Counter() {
 
           {/* Decrement */}
           <button
-            onClick={() => setCount((c) => c - 1)}
-            className="group flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 hover:bg-rose-500 hover:border-rose-400 hover:text-white active:scale-95 transition-all duration-150 shadow-lg"
+            onClick={decrement}
+            disabled={count === 0}
+            className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-red-500/20 border border-red-400/40 text-red-300 transition-all duration-200 hover:bg-red-500/40 hover:border-red-400/70 hover:scale-105 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-red-500/20"
             aria-label="Verlaag teller"
           >
-            <Minus size={22} strokeWidth={2.5} />
+            <Minus className="w-7 h-7" strokeWidth={2.5} />
           </button>
 
           {/* Reset */}
           <button
-            onClick={() => setCount(0)}
-            className="group flex items-center justify-center w-12 h-12 rounded-xl bg-slate-700 border border-slate-600 text-slate-400 hover:bg-slate-600 hover:text-slate-200 active:scale-95 transition-all duration-150 shadow-md"
+            onClick={reset}
+            disabled={count === 0}
+            className="flex items-center justify-center w-12 h-12 rounded-xl bg-white/10 border border-white/20 text-white/50 transition-all duration-200 hover:bg-white/20 hover:text-white/80 hover:scale-105 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-white/10"
             aria-label="Reset teller"
           >
-            <RotateCcw size={16} strokeWidth={2.5} />
+            <RotateCcw className="w-5 h-5" strokeWidth={2} />
           </button>
 
           {/* Increment */}
           <button
-            onClick={() => setCount((c) => c + 1)}
-            className="group flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 hover:bg-emerald-500 hover:border-emerald-400 hover:text-white active:scale-95 transition-all duration-150 shadow-lg"
+            onClick={increment}
+            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 transition-all duration-200 hover:bg-emerald-500/40 hover:border-emerald-400/70 hover:scale-105 active:scale-95"
             aria-label="Verhoog teller"
           >
-            <Plus size={22} strokeWidth={2.5} />
+            <Plus className="w-7 h-7" strokeWidth={2.5} />
           </button>
 
         </div>
 
-        {/* Step label */}
-        <p className="text-slate-600 text-xs tracking-widest uppercase select-none">
-          stap 1
-        </p>
+        {/* Floor indicator */}
+        {count === 0 && (
+          <p className="text-white/30 text-sm">
+            Minimum bereikt
+          </p>
+        )}
 
       </div>
     </div>
