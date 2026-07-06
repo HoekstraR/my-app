@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["*.sprites.app"],
-  /* config options here */
+  allowedDevOrigins: ['*.sprites.app'],
 };
 
 export default nextConfig;
