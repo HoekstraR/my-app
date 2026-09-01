@@ -12,58 +12,58 @@ export default function HomePage() {
   const reset = () => setCount(0);
 
   const countColor =
-    count > 0 ? 'text-emerald-400' : count < 0 ? 'text-rose-400' : 'text-white';
+    count > 0
+      ? 'text-emerald-500'
+      : count < 0
+      ? 'text-rose-500'
+      : 'text-slate-700';
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-900">
-      <div className="flex flex-col items-center gap-10">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+      <div className="bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center gap-8 w-80">
 
         {/* Title */}
-        <h1 className="text-2xl font-semibold tracking-widest uppercase text-slate-400 select-none">
+        <h1 className="text-xl font-semibold text-slate-500 tracking-widest uppercase">
           Teller
         </h1>
 
         {/* Count display */}
-        <div className="relative flex items-center justify-center w-56 h-56 rounded-full bg-slate-800 shadow-[0_0_60px_rgba(0,0,0,0.5)] ring-1 ring-slate-700">
-          <span className={`text-7xl font-bold tabular-nums transition-colors duration-300 ${countColor}`}>
-            {count}
-          </span>
+        <div
+          className={`text-8xl font-bold tabular-nums transition-colors duration-300 ${countColor}`}
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {count}
         </div>
 
-        {/* Buttons */}
-        <div className="flex items-center gap-5">
-          {/* Decrement */}
+        {/* Increment / Decrement */}
+        <div className="flex items-center gap-4">
           <button
             onClick={decrement}
-            aria-label="Verlaag teller"
-            className="flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 ring-1 ring-slate-700 text-slate-300 hover:bg-rose-500 hover:ring-rose-400 hover:text-white active:scale-95 transition-all duration-150 shadow-lg cursor-pointer"
+            aria-label="Verminder met 1"
+            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 active:scale-95 transition-all duration-150 shadow-sm"
           >
             <Minus size={28} strokeWidth={2.5} />
           </button>
 
-          {/* Reset */}
-          <button
-            onClick={reset}
-            aria-label="Reset teller"
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 ring-1 ring-slate-700 text-slate-500 hover:bg-slate-700 hover:text-slate-200 active:scale-95 transition-all duration-150 shadow-md cursor-pointer"
-          >
-            <RotateCcw size={20} strokeWidth={2} />
-          </button>
-
-          {/* Increment */}
           <button
             onClick={increment}
-            aria-label="Verhoog teller"
-            className="flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 ring-1 ring-slate-700 text-slate-300 hover:bg-emerald-500 hover:ring-emerald-400 hover:text-white active:scale-95 transition-all duration-150 shadow-lg cursor-pointer"
+            aria-label="Verhoog met 1"
+            className="flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-500 hover:bg-emerald-100 active:scale-95 transition-all duration-150 shadow-sm"
           >
             <Plus size={28} strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* Subtle hint */}
-        <p className="text-xs text-slate-600 tracking-wide select-none">
-          {count === 0 ? 'Druk op + of − om te beginnen' : count > 0 ? `${count} stap${count !== 1 ? 'pen' : ''} omhoog` : `${Math.abs(count)} stap${Math.abs(count) !== 1 ? 'pen' : ''} omlaag`}
-        </p>
+        {/* Reset */}
+        <button
+          onClick={reset}
+          aria-label="Reset naar 0"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 active:scale-95 transition-all duration-150 text-sm font-medium"
+        >
+          <RotateCcw size={15} strokeWidth={2.5} />
+          Reset
+        </button>
       </div>
     </main>
   );

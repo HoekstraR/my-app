@@ -1,6 +1,6 @@
 Project Summary
 ===============
-NextJS 15 Starter Template — a minimal, production-ready foundation for building modern web applications. Pre-configured with TypeScript, Tailwind CSS 4, and essential Next.js App Router patterns. Ships with a placeholder HomePage component ready to be replaced by the user's app.
+Teller-app — een simpele teller met increment, decrement en reset. Gebouwd op de NextJS 15 / Tailwind 4 baseline. State is ephemeral (local useState).
 
 Architecture Overview
 ====================
