@@ -55,13 +55,7 @@ export default function GlobalError({
               {error.message || 'An unexpected error occurred.'}
             </p>
             <button
-              onClick={() => {
-                try {
-                  window.parent.postMessage({ type: 'walden-reload-container' }, '*')
-                } catch {
-                  reset()
-                }
-              }}
+              onClick={reset}
               style={{
                 padding: '0.625rem 1.5rem',
                 background: '#3b82f6',

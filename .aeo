@@ -1,33 +1,239 @@
+
 Project Summary
 ===============
-Teller-app — een simpele teller met increment, decrement en reset. Gebouwd op de NextJS 15 / Tailwind 4 baseline. State is ephemeral (local useState).
+VFIG Website - A professional, authoritative website for the Dutch trade association of industrial gas manufacturers (Vereniging van Fabrikanten van Industriële Gassen). Features targeted navigation for three primary user groups: government, medical sector, and industrial sector, plus press contacts. Built with Next.js 15 and Tailwind CSS with a conservative Dutch professional aesthetic.
 
 Architecture Overview
 ====================
-Single-page Next.js App Router app. Server Components by default; any interactivity lives in client components under `components/`. Top-level routing files (`page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx`, `loading.tsx`) are all server components — `'use client'` NEVER appears at this level (breaks WebContainer prerendering). Styling is Tailwind CSS 4 via `@import "tailwindcss";` in `app/globals.css`.
+Multi-page application using Next.js App Router with distinct paths for each user group. Follows conservative/authoritative design principles with blue-focused color scheme, structured layouts, and clear information hierarchy. Emphasizes trust, reliability, and regulatory compliance to match the highly regulated industrial gas sector.
+
+Directory Structure
+===================
+/
+├── app/
+│   ├── page.tsx                 # Homepage with user group navigation
+│   ├── layout.tsx               # Root layout (unchanged from template)
+│   ├── globals.css              # Global styles (unchanged from template)
+│   ├── medisch/
+│   │   └── page.tsx            # Medical sector page wrapper
+│   ├── industrieel/
+│   │   └── page.tsx            # Industrial sector page wrapper
+│   ├── over/
+│   │   └── page.tsx            # About VFIG page wrapper
+│   ├── error.tsx                # Error boundary (unchanged from template)
+│   ├── not-found.tsx            # 404 page (unchanged from template)
+│   ├── loading.tsx              # Loading state (unchanged from template)
+│   └── favicon.ico              # Site favicon (unchanged from template)
+├── components/
+│   ├── VfigHomepage.tsx         # Main homepage component
+│   ├── ContactModal.tsx         # Unified contact form modal
+│   ├── MedischePage.tsx         # Medical sector content page
+│   ├── IndustrieelPage.tsx      # Industrial sector content page
+│   └── OverPage.tsx             # About VFIG content page
+├── node_modules/                # Dependencies (managed by npm)
+├── .aeo                         # This file - project documentation
+├── package.json                 # Dependencies and scripts (unchanged)
+├── tsconfig.json                # TypeScript configuration (unchanged)
+├── next.config.ts               # Next.js configuration (unchanged)
+├── next-env.d.ts                # Next.js TypeScript declarations (unchanged)
+├── eslint.config.mjs            # ESLint configuration (unchanged)
+└── README.md                    # Project documentation (unchanged)
+
+Dependency Tree
+===============
+Production Dependencies: (unchanged from template)
+├── next@15.4.4                  # React framework with SSR and App Router
+├── react@19.0.0                 # React library (latest)
+├── react-dom@19.0.0             # React DOM renderer
+└── lucide-react@0.509.0         # Icon library (extensively used for professional icons)
+
+Development Dependencies: (unchanged from template)
+├── typescript@5                  # TypeScript compiler
+├── tailwindcss@4                 # Utility-first CSS framework
+├── @tailwindcss/postcss@4        # PostCSS integration for Tailwind
+├── eslint@9                      # Code linting
+├── eslint-config-next@15.2.3     # Next.js ESLint preset
+├── @types/node@20                # Node.js type definitions
+├── @types/react@19               # React type definitions
+└── @types/react-dom@19           # React DOM type definitions
 
 Key Components
 ==============
 
-- **Page** (`app/page.tsx`) — Server Component wrapper. Imports and renders `<HomePage />`. Must stay a Server Component (WebContainer breaks with 'use client' at this level).
-- **HomePage** (`components/HomePage.tsx`) — Placeholder component. This is the file Dex replaces with the user's actual app. Can be a client component ('use client').
-- **RootLayout** (`app/layout.tsx`) — Root HTML shell. Loads Geist Sans + Geist Mono via `next/font/google` and defines SEO metadata. Antialiasing enabled.
-- **Error Boundary** (`app/error.tsx`) — Runtime error recovery with retry.
-- **NotFound** (`app/not-found.tsx`) — 404 page. Plain server component using only `Link` from `next/link` and inline SVG.
-- **Loading** (`app/loading.tsx`) — Route transition spinner.
+1. VfigHomepage (components/VfigHomepage.tsx)
+   Purpose: Main landing page with user group routing
+   Input: None
+   Output: Professional homepage with three primary user paths
+   Dependencies: lucide-react (Factory, Heart, Building2, etc.)
+   State: Contact modal state management
+   Features:
+   - Hero section with VFIG branding
+   - Three primary user group navigation cards (Government, Medical, Industrial)
+   - News/actualiteiten section with Dutch content
+   - Safety sheets section with cards and icons
+   - Press contact section
+   - Professional blue-focused color scheme
+   - Fully responsive design
 
-Agent Memory
-============
-- `.walden-memories/` — shared folder where specialists write working documents for each other. Design specs, debug reports, SEO audits. Agents read from here instead of receiving large specs through Walden's token budget.
+2. ContactModal (components/ContactModal.tsx)
+   Purpose: Unified contact form routing to different contact persons
+   Input: isOpen, onClose props
+   Output: Modal with contact type selection and form
+   Dependencies: lucide-react (User, Building2, Newspaper, etc.)
+   State: Selected contact type and form data
+   Features:
+   - Four contact types (medical, industrial, government, press)
+   - Dynamic form with dummy contact persons
+   - Professional form validation
+   - Dutch language interface
+   - Prevents direct contact info exposure
 
-Invariants
-==========
-- `app/*/page.tsx`, `layout.tsx`, `not-found.tsx`, `error.tsx` are ALWAYS Server Components. No `'use client'`, no hooks, no event handlers at this layer.
-- Client interactivity (useState, useEffect, onClick) lives in `components/*.tsx` with `'use client'`.
-- No database. No env vars. No auth. No persistence — any state is ephemeral.
-- `.env.local` exists at project root but is managed by the app (not written by agents directly).
+3. MedischePage (components/MedischePage.tsx)
+   Purpose: Dedicated page for medical sector users
+   Input: None
+   Output: Medical-focused content and resources
+   Dependencies: lucide-react, ContactModal
+   State: Contact modal and FAQ expansion state
+   Features:
+   - Medical gas information (O₂, N₂O, CO₂, mixtures)
+   - Relevant regulations (EU MDR, NEN-EN-ISO, etc.)
+   - Specialized contact persons
+   - Medical sector FAQ
+   - Red accent colors for medical branding
 
-Notes for agents
+4. IndustrieelPage (components/IndustrieelPage.tsx)
+   Purpose: Dedicated page for industrial sector users
+   Input: None
+   Output: Industrial-focused content and resources
+   Dependencies: lucide-react, ContactModal
+   State: Contact modal and FAQ expansion state
+   Features:
+   - Industrial applications (welding, process gases, food, transport)
+   - Industrial regulations (ADR, PED, ATEX, etc.)
+   - Technical contact persons
+   - Industrial sector FAQ
+   - Green accent colors for industrial branding
+
+5. OverPage (components/OverPage.tsx)
+   Purpose: About VFIG organizational information
+   Input: None
+   Output: VFIG mission, history, and organizational details
+   Dependencies: lucide-react, ContactModal
+   State: Contact modal state
+   Features:
+   - VFIG mission and core tasks
+   - Organizational statistics
+   - Gas types and applications
+   - Why VFIG exists explanation
+   - Professional organizational branding
+
+Technology Stack
 ================
-- Dependencies, versions, and the directory tree are NOT duplicated here. Read `package.json` or `list_directory` for that.
-- When you change the project structure, update THIS file accordingly: add new components under Key Components, document new invariants, update the Architecture Overview if the fundamental shape shifts.
+Frontend Framework: Next.js 15.4.4 (App Router)
+Language: TypeScript 5
+Styling: Tailwind CSS 4 (Conservative/Professional approach)
+UI Library: React 19
+Icons: Lucide React 0.509.0 (Professional icon set)
+Fonts: Geist Sans, Geist Mono (unchanged from template)
+Linting: ESLint 9 (Next.js config)
+Package Manager: npm
+Node Version: 20+ (recommended)
+
+Design Decisions
+================
+1. **Conservative/Professional Aesthetic**: Matches highly regulated industrial sector expectations
+2. **Blue Primary Color**: Professional, trustworthy, government-appropriate
+3. **Sector-Specific Color Coding**: Red for medical, green for industrial, blue for government
+4. **Structured Information Architecture**: Clear hierarchy, predictable navigation
+5. **Dutch Language Only**: Serves Dutch regulatory and business environment
+6. **Contact Protection**: Modal system prevents direct contact exposure to media
+7. **Accessibility First**: High contrast, semantic HTML, keyboard navigation
+8. **Mobile-Responsive**: Professional appearance across all devices
+9. **Minimal Motion**: Subtle hover states only, appropriate for professional context
+10. **Trust-Building Elements**: Statistics, credentials, regulatory compliance emphasis
+
+Target Audiences
+================
+1. **Government/Regulatory (30-50 years)**:
+   - VFIG information and compliance status
+   - Regulatory communications verification
+   - Professional, authoritative presentation
+
+2. **Medical Sector Clients (30-50 years)**:
+   - Medical gas applications and safety
+   - Healthcare-specific regulations
+   - Clinical support resources
+   - Red-coded section for medical branding
+
+3. **Industrial Sector Clients (30-50 years)**:
+   - Industrial gas applications
+   - Manufacturing and processing support
+   - Technical and safety resources
+   - Green-coded section for industrial branding
+
+4. **Press/Media (30-50 years)**:
+   - Crisis/incident information needs
+   - Quick access to spokespersons
+   - VFIG background and authority establishment
+
+Content Strategy
+================
+1. **User-First Navigation**: Immediate routing to relevant content
+2. **Authority Building**: Statistics, history, regulatory compliance
+3. **Dutch Professional Tone**: Formal but accessible language
+4. **Safety Emphasis**: Highlighting regulatory compliance and risk management
+5. **Sector Expertise**: Demonstrating deep knowledge of gas applications
+6. **Contact Accessibility**: Easy but controlled contact routing
+7. **Current Information**: News and regulatory updates
+8. **FAQ Strategy**: Addressing common technical and regulatory questions
+
+Known Limitations
+=================
+1. **Static Content**: All content is hardcoded (could integrate CMS)
+2. **No User Authentication**: Public access only
+3. **Mock Contact System**: Contact forms don't actually send emails
+4. **No Search Functionality**: Users rely on navigation structure
+5. **No Multi-language**: Dutch only (could add English for international members)
+6. **No Analytics**: No visitor tracking configured
+7. **Static News**: News items are hardcoded (could integrate news management)
+8. **No Document Management**: Safety sheets are placeholder links
+
+Future Extensions
+=================
+1. **Content Management System**: WordPress headless or Sanity integration
+2. **Contact System Backend**: Email routing and CRM integration
+3. **Document Management**: PDF hosting and search for safety sheets
+4. **News Management**: Dynamic news posting and archival system
+5. **Member Portal**: Private section for VFIG members
+6. **Multi-language Support**: English version for international stakeholders
+7. **Search Functionality**: Site-wide search for regulations and documents
+8. **Analytics Integration**: Visitor behavior and content performance tracking
+9. **Email Newsletter**: Regulatory updates and industry news distribution
+10. **Mobile App**: Quick access to safety information for field workers
+
+Security Considerations
+=======================
+1. **Contact Information Protection**: No direct email/phone exposure
+2. **Form Validation**: Client and server-side validation required
+3. **Rate Limiting**: Contact form submission limits needed
+4. **Content Security**: Ensure safety document authenticity
+5. **Privacy Compliance**: GDPR compliance for contact forms
+6. **Access Logging**: Monitor for unauthorized access attempts
+
+Performance Optimizations
+=========================
+1. **Server Components**: Most components server-rendered for speed
+2. **Image Optimization**: Next.js automatic image optimization
+3. **Code Splitting**: Automatic route-based code splitting
+4. **Static Generation**: Pre-build static pages where possible
+5. **Lazy Loading**: Components and images loaded on demand
+6. **Font Optimization**: Next.js font optimization enabled
+
+Version History
+===============
+Version: 1.0.0 (VFIG Professional Website)
+Last Updated: 2025-01-16
+Created By: Walden AI Platform
+Industry: Industrial Gas Manufacturing (B2B/B2G)
+Audience: Government, Medical, Industrial professionals (30-50 years)
+Aesthetic: Conservative/Professional Dutch Authority

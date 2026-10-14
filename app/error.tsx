@@ -46,13 +46,7 @@ export default function Error({
           </p>
           
           <button
-            onClick={() => {
-              try {
-                window.parent.postMessage({ type: 'walden-reload-container' }, '*')
-              } catch {
-                reset()
-              }
-            }}
+            onClick={reset}
             className="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
