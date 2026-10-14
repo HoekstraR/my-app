@@ -116,7 +116,7 @@ export default function VfigHomepage() {
                 className="group bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-blue-300"
               >
                 <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
-                  <Factory className="w-8 h-8 text-green-600" />
+                  <Building2 className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Industriële Sector</h3>
                 <p className="text-gray-600 mb-4">Procesgassen, lassen, voedselindustrie en energietoepassingen</p>
