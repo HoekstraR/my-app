@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { FileText, Shield, Phone, ArrowRight, ExternalLink, Calendar, Building2, Heart, Factory, Newspaper } from 'lucide-react';
-import Image from 'next/image';
+
 import ContactModal from './ContactModal';
 
 export default function VfigHomepage() {

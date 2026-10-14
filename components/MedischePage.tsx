@@ -92,12 +92,10 @@ export default function MedischePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
-              <Image
+              <img
                 src="/vfig_logo.jpeg"
                 alt="VFIG logo"
-                height={48}
-                width={120}
-                className="h-12 w-auto object-contain"
+                style={{ height: '48px', width: 'auto', objectFit: 'contain' }}
               />
               <span className="text-lg font-semibold text-gray-900">Medische Sector</span>
             </Link>
