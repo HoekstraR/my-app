@@ -45,11 +45,7 @@ export default function VfigHomepage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div>
-
-                <h1 className="text-xl font-bold text-gray-900">VFIG</h1>
-                <p className="text-xs text-gray-600">Vereniging van Fabrikanten van Industriële Gassen</p>
-              </div>
+              <img src="/vfig_logo.jpeg" alt="VFIG logo" className="h-10 w-auto object-contain" />
             </div>
             <nav className="hidden md:flex items-center space-x-8">
               <a href="/over" className="text-gray-700 hover:text-blue-600 transition-colors">Over</a>
