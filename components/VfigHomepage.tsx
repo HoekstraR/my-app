@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FileText, Shield, Phone, ArrowRight, ExternalLink, Calendar, Building2, Heart, Factory, Newspaper } from 'lucide-react';
+import { FileText, Shield, Phone, ArrowRight, ExternalLink, Calendar, Building2, Heart, Newspaper } from 'lucide-react';
 
 import ContactModal from './ContactModal';
 
